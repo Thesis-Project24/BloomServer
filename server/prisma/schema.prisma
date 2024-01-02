@@ -8,8 +8,8 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email   String @unique
+  id Int @id @default(autoincrement())
+  email String @unique
   username String @unique
   first_name String
   last_name String
@@ -19,19 +19,19 @@ model User {
   mood Int[]
   journalPosts Journal[]
   meds MedSchedule[]
-  appointements Appointement[]
+  appointments Appointment[]
   forumPosts ForumPost[]
   comments Comment[] @relation("author")
   tags Comment[] @relation("tag")
   groups Group[]
   savedArticles SaveArticle[]
   trackedHabits TrackHabit[]
-  
+  slots Slot[] @relation("waitlist")
 }
 
 model Doctor {
-  id        Int      @id @default(autoincrement())
-  email   String @unique
+  id Int @id @default(autoincrement())
+  email String @unique
   first_name String
   last_name String
   specialty String
@@ -39,13 +39,14 @@ model Doctor {
   phone_number String
   address String
   bio String
-  appointement Appointement[]
   artices Article[]
   groups Group[]
+  window window[]
+  appointment Appointment[]
 }
 
 model Meds {
-  id        Int      @id @default(autoincrement())
+  id Int @id @default(autoincrement())
   name String  @unique
   schedules MedSchedule[]
   }
@@ -58,15 +59,27 @@ model Journal {
   authorId Int
 }
 
-model Appointement {
+model Appointment {
   id Int @id @default(autoincrement())
   patient User @relation(fields: [patientId],references: [id])
   patientId Int
   doctor Doctor @relation(fields: [doctorId],references: [id])
   doctorId Int
-  schedule DateTime
+  appDetails String
+  appStatus String @default("available")
+  appReview Int
+  appFeedback String
+  slot Slot @relation(fields: [slotId],references: [id])
+  slotId Int @unique
 }
+model Slot {
+  id Int @id @default(autoincrement())
+  window window @relation(fields: [windowId],references: [id])
+  windowId Int
+  waitlist User[] @relation(name:"waitlist")
+  appointment Appointment?
 
+}
 model ForumPost {
   id Int @id @default(autoincrement())
   content String
@@ -87,8 +100,8 @@ model Comment {
   postId Int
   User User @relation(name: "author",fields: [userId],references: [id])
   userId Int
-  taggedUser User @relation(name: "tag",fields: [tagId],references: [id])
-  tagId Int
+  taggedUser User? @relation(name: "tag",fields: [tagId],references: [id])
+  tagId Int?
 }
 
 model Article {
@@ -144,4 +157,13 @@ model TrackHabit  {
   user User @relation(fields:[userId], references: [id])
   userId Int
   tracker Int[]
+}
+model window {
+  id Int @id @default(autoincrement())
+  doctor Doctor @relation(fields: [doctorId],references: [id])
+  doctorId Int
+  startingTime DateTime
+  endingTime DateTime
+  duration Int
+  slots Slot[]
 }
