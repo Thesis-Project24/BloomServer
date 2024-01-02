@@ -5,9 +5,9 @@ CREATE TABLE "User" (
     "username" TEXT NOT NULL,
     "first_name" TEXT NOT NULL,
     "last_name" TEXT NOT NULL,
-    "profile_picture" TEXT NOT NULL,
-    "phone_number" TEXT NOT NULL,
-    "age" INTEGER NOT NULL,
+    "profile_picture" TEXT,
+    "phone_number" TEXT,
+    "age" INTEGER,
     "mood" INTEGER[],
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
@@ -19,11 +19,11 @@ CREATE TABLE "Doctor" (
     "email" TEXT NOT NULL,
     "first_name" TEXT NOT NULL,
     "last_name" TEXT NOT NULL,
-    "specialty" TEXT NOT NULL,
-    "profile_picture" TEXT NOT NULL,
-    "phone_number" TEXT NOT NULL,
-    "address" TEXT NOT NULL,
-    "bio" TEXT NOT NULL,
+    "specialty" TEXT,
+    "profile_picture" TEXT,
+    "phone_number" TEXT,
+    "address" TEXT,
+    "bio" TEXT,
 
     CONSTRAINT "Doctor_pkey" PRIMARY KEY ("id")
 );
@@ -39,7 +39,7 @@ CREATE TABLE "Meds" (
 -- CreateTable
 CREATE TABLE "Journal" (
     "id" SERIAL NOT NULL,
-    "private" BOOLEAN NOT NULL,
+    "private" BOOLEAN NOT NULL DEFAULT true,
     "content" TEXT NOT NULL,
     "authorId" INTEGER NOT NULL,
 
@@ -51,10 +51,10 @@ CREATE TABLE "Appointment" (
     "id" SERIAL NOT NULL,
     "patientId" INTEGER NOT NULL,
     "doctorId" INTEGER NOT NULL,
-    "appDetails" TEXT NOT NULL,
+    "appDetails" TEXT,
     "appStatus" TEXT NOT NULL DEFAULT 'available',
-    "appReview" INTEGER NOT NULL,
-    "appFeedback" TEXT NOT NULL,
+    "appReview" INTEGER,
+    "appFeedback" TEXT,
     "slotId" INTEGER NOT NULL,
 
     CONSTRAINT "Appointment_pkey" PRIMARY KEY ("id")
@@ -72,8 +72,8 @@ CREATE TABLE "Slot" (
 CREATE TABLE "ForumPost" (
     "id" SERIAL NOT NULL,
     "content" TEXT NOT NULL,
-    "upvote" INTEGER NOT NULL,
-    "downvote" INTEGER NOT NULL,
+    "upvote" INTEGER,
+    "downvote" INTEGER,
     "authorId" INTEGER NOT NULL,
 
     CONSTRAINT "ForumPost_pkey" PRIMARY KEY ("id")
@@ -83,8 +83,8 @@ CREATE TABLE "ForumPost" (
 CREATE TABLE "Comment" (
     "id" SERIAL NOT NULL,
     "content" TEXT NOT NULL,
-    "upvote" INTEGER NOT NULL,
-    "downvote" INTEGER NOT NULL,
+    "upvote" INTEGER,
+    "downvote" INTEGER,
     "postId" INTEGER NOT NULL,
     "userId" INTEGER NOT NULL,
     "tagId" INTEGER,
@@ -163,6 +163,7 @@ CREATE TABLE "window" (
     "startingTime" TIMESTAMP(3) NOT NULL,
     "endingTime" TIMESTAMP(3) NOT NULL,
     "duration" INTEGER NOT NULL,
+    "break" INTEGER NOT NULL,
 
     CONSTRAINT "window_pkey" PRIMARY KEY ("id")
 );
