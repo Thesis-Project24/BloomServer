@@ -78,7 +78,6 @@ model Slot {
   windowId Int
   waitlist User[] @relation(name:"waitlist")
   appointment Appointment?
-
 }
 model ForumPost {
   id Int @id @default(autoincrement())
