@@ -17,7 +17,6 @@ model User {
   phone_number String
   age Int
   mood Int[]
-  sleep Int[]
   journalPosts Journal[]
   meds MedSchedule[]
   appointements Appointement[]
@@ -26,6 +25,7 @@ model User {
   tags Comment[] @relation("tag")
   groups Group[]
   savedArticles SaveArticle[]
+  trackedHabits TrackHabit[]
   
 }
 
@@ -131,7 +131,17 @@ model MedSchedule {
   schedule DateTime
 }
 
-// model Habit {
-//   id Int @id @default(autoincrement())
-//   name String @unique
-// }
+model Habit {
+  id Int @id @default(autoincrement())
+  name String @unique
+  tracking TrackHabit[]
+}
+
+model TrackHabit  {
+  id Int @id @default(autoincrement())
+  habit Habit @relation(fields: [habitId], references: [id])
+  habitId Int
+  user User @relation(fields:[userId], references: [id])
+  userId Int
+  tracker Int[]
+}
