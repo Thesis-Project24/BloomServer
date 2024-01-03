@@ -29,6 +29,23 @@ try {
     
 }
 }
+const signIn = async (req: Request, res: Response) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: { email: req.body.email }
+        });
+
+        if (!user) {
+            res.status(409).send("User does not exist");
+        } else {
+            res.status(200).send(user);
+        }
+    } catch (error) {
+        res.send(error);
+    }
+};
 
 
-export {signUp}
+
+
+export {signUp,signIn}
