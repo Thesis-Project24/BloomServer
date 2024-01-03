@@ -5,24 +5,44 @@ const prisma = new PrismaClient()
 
 const addSlots= async(req:Request,res:Response) => {
     try {
-        const window:window= prisma.window.findUnique({
+        let  window :Window | null =  await prisma.window.findUnique({
             where:{
                 id: Number(req.params.windowId)
             }
         })
-        let startM= window.startingTime.getMinutes()
-        let startH= window.startingTime.getHours()
-        let start= startM + (startH * 60)
-        let endM= window.startingTime.getMinutes()
-        let endH= window.startingTime.getHours()
-        let end= endM + (endH * 60)
-        let windowDuration = end - start
-        let slots = []
-        while (windowDuration !== 0) {
+        let start = window?.startingTime.valueOf()
+        let end = window?.endingTime.valueOf()
+        let windowDuration = (end - start) / 60000
+        let slots : any[] = []
+        let x = window?.duration || 61
+        let y = window?.pause || 16
+        // console.log(end,  'end');
+        // console.log(start,  'start');
+        // console.log(windowDuration)
+        
+        while (start < end) {
+            console.log(x);
+            console.log(windowDuration, "duration");
             let slot={
-                windowId:window.id,
+                windowId:window?.id,
+                startingTime:new Date(start),
+                endingTime:new Date (start + (x* 60000)),
             }
+            if(window?.duration){       
+                windowDuration = windowDuration- x + y
+                start = start + ((x + y)*60000)
+                
+                // console.log(windowDuration,"test1")
+                
+            }
+            // console.log(x,y);
+
+            // console.log(start);
+            
+            slots.push(slot)
         }
+            await prisma.slot.createMany({data:slots})
+            res.send(slots)
 
     }
     catch(error){

@@ -11,15 +11,15 @@ interface User {
 }
 
 interface Doctor {
-  id: number;
-  email: string;
-  first_name: string;
-  last_name: string;
-  specialty: string;
-  profile_picture: string;
-  phone_number: string;
-  address: string;
-  bio: string;
+    id ? : number
+    email: string 
+    first_name: string
+    last_name: string
+    specialty: string
+    profile_picture: string
+    phone_number: string
+    address: string
+    bio ? : string
 }
 
 interface Meds {
@@ -45,6 +45,8 @@ interface Appointmenent {
 interface Slot {
   id: number;
   windowId: number;
+  startingTime: dateTime
+  endingTime: dateTime
 }
 
 interface ForumPost {
@@ -115,7 +117,7 @@ interface Window {
   startingTime: DateTime;
   endingTime: DateTime;
   duration: number;
-  break: number;
+  pause: number;
 }
 
 export {
