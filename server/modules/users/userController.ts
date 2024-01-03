@@ -45,7 +45,17 @@ const signIn = async (req: Request, res: Response) => {
     }
 };
 
+const deleteAccount=async(req:Request,res:Response)=>{
+    try {
+        const id=Number(req.params.id)
+        const user =await prisma.user.delete({
+            where:{id:id}
+        })
+        res.send("deleted")
+    } catch (error) {
+        res.send(error)
+    }
+}
 
 
-
-export {signUp,signIn}
+export {signUp,signIn,deleteAccount}
