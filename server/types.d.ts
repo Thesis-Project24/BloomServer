@@ -118,3 +118,22 @@ interface Habit {
     duration: number
     break: number
   }
+
+  export {
+    User,
+    Doctor,
+    Meds,
+    MedSchedule,
+    Appointmenent,
+    Article,
+    Journal,
+    SaveArticle,
+    Slot,
+    Habit,
+    TrackHabit,
+    Window,
+    Comment,
+    Flair,
+    forumPost,
+    Group,
+  };
