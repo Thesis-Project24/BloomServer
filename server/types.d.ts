@@ -11,7 +11,7 @@ interface User {
 }
 
 interface Doctor {
-    id: number
+    id ? : number
     email: string 
     first_name: string
     last_name: string
@@ -19,7 +19,7 @@ interface Doctor {
     profile_picture: string
     phone_number: string
     address: string
-    bio: string
+    bio ? : string
 }
 
 interface Meds {
