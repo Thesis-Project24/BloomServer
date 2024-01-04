@@ -64,6 +64,8 @@ CREATE TABLE "Appointment" (
 CREATE TABLE "Slot" (
     "id" SERIAL NOT NULL,
     "windowId" INTEGER NOT NULL,
+    "startingTime" TIMESTAMP(3) NOT NULL,
+    "endingTime" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Slot_pkey" PRIMARY KEY ("id")
 );
@@ -163,7 +165,7 @@ CREATE TABLE "window" (
     "startingTime" TIMESTAMP(3) NOT NULL,
     "endingTime" TIMESTAMP(3) NOT NULL,
     "duration" INTEGER NOT NULL,
-    "break" INTEGER NOT NULL,
+    "pause" INTEGER NOT NULL,
 
     CONSTRAINT "window_pkey" PRIMARY KEY ("id")
 );
