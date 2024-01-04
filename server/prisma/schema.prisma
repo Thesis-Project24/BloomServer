@@ -157,7 +157,7 @@ model TrackHabit  {
   habitId Int
   user User @relation(fields:[userId], references: [id])
   userId Int
-  tracker Int[]
+  tracker Json[]
 }
 model window {
   id Int @id @default(autoincrement())
