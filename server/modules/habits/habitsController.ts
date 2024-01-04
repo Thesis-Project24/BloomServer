@@ -96,42 +96,41 @@ export const getAllHabitsFromUser = async (req: Request, res: Response) => {
   }
 };
 
-
 //  {helper to get the day of the week}
 function getDayOfWeek(date: Date): string {
-    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const dayIndex = date.getDay();
-    return daysOfWeek[dayIndex];
-  }
+  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const dayIndex = date.getDay();
+  return daysOfWeek[dayIndex];
+}
 // {tracker function }
- export const postSatisfaction =async (req:Request,res:Response) => {
-    try {
-        const {habitId,userId,rating} = req.body
-        // check if the habit is assigned to the user first 
-        const trackHabit = await prisma.trackHabit.findFirst({
-            where : {
-                habitId,
-                userId
-            }
-        })
-        if(!trackHabit){
-            return res.status(404).json({error : 'Habit not assigned'})
-        }
-        const currentDate = new Date ()
-        const dayOfWeek= getDayOfWeek(currentDate)
-        const existingTracker = trackHabit.tracker
-        const updatedTracker = [...existingTracker,{dayOfWeek,rating}]
-        await prisma.trackHabit.update({
-            where : {
-                id:trackHabit.id,
-            },
-            data : {
-                tracker: updatedTracker
-            }as any
-        })
-        return res.status(200).json({success:'rating Submitted'})
-    }catch (error){
-        console.error(error);
-        return res.status(500).json({error: 'Internal server err'})
-    }
- }  
+export const postSatisfaction =async (req:Request,res:Response) => {
+  try {
+      const {habitId,userId,rating} = req.body
+      // check if the habit is assigned to the user first 
+      const trackHabit = await prisma.trackHabit.findFirst({
+          where : {
+              habitId,
+              userId
+          }
+      })
+      if(!trackHabit){
+          return res.status(404).json({error : 'Habit not assigned'})
+      }
+      const currentDate = new Date ()
+      const dayOfWeek= getDayOfWeek(currentDate)
+      const existingTracker = trackHabit.tracker
+      const updatedTracker = [...existingTracker,{dayOfWeek,rating}]
+      await prisma.trackHabit.update({
+          where : {
+              id:trackHabit.id,
+          },
+          data : {
+              tracker: updatedTracker
+          }as any
+      })
+      return res.status(200).json({success:'rating Submitted'})
+  }catch (error){
+      console.error(error);
+      return res.status(500).json({error: 'Internal server err'})
+  }
+}
