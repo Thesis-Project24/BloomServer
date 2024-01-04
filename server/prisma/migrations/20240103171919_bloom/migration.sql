@@ -151,7 +151,7 @@ CREATE TABLE "TrackHabit" (
     "id" SERIAL NOT NULL,
     "habitId" INTEGER NOT NULL,
     "userId" INTEGER NOT NULL,
-    "tracker" INTEGER[],
+    "tracker" JSONB[],
 
     CONSTRAINT "TrackHabit_pkey" PRIMARY KEY ("id")
 );
