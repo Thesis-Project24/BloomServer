@@ -135,9 +135,5 @@ interface Habit {
     Comment,
     Flair,
     forumPost,
-<<<<<<< HEAD
     Group,
-=======
-    Group
->>>>>>> f9ba41b56957fb9a134eda4067fc0ddb1103c0ea
   };
