@@ -19,6 +19,7 @@ export const getDoctors = async (req:Request,res:Response)=>{
     export const getOneDoc = async (req:Request,res:Response)=>{
         const productId = JSON.parse(req.params.id);
         try {
+            // findUnique
             const doc = await prisma.doctor.findMany({
                 where: {
                   id: productId,
@@ -39,7 +40,7 @@ export const getDoctors = async (req:Request,res:Response)=>{
 
 
 export const addDoctor = async (req:Request,res:Response)=>{
-    const {email,first_name,last_name,phone_number,specialty,profile_picture,address}:Doctor = req.body
+    const {email,first_name,last_name,phone_number,specialty,profile_picture,address , bio}:Doctor = req.body
     try {
        
         const docBody : Doctor = {
@@ -49,7 +50,8 @@ export const addDoctor = async (req:Request,res:Response)=>{
             phone_number,
             specialty,
             profile_picture,
-            address
+            address,
+            bio
         }
         const doc = await prisma.doctor.create({
             data: docBody
@@ -66,7 +68,7 @@ export const addDoctor = async (req:Request,res:Response)=>{
 
     
 export const upDateDoc = async (req:Request,res:Response)=>{
-    const {id ,email,first_name,last_name,phone_number,specialty,profile_picture,address}:Doctor = req.body
+    const {id ,email,first_name,last_name,phone_number,specialty,profile_picture,address , bio}:Doctor = req.body
    
     try {
        
@@ -77,7 +79,8 @@ export const upDateDoc = async (req:Request,res:Response)=>{
             phone_number,
             specialty,
             profile_picture,
-            address
+            address,
+            bio
         }
         const doc = await prisma.doctor.update({
             where: { id },

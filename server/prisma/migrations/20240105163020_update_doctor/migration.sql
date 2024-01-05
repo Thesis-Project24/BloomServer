@@ -22,7 +22,7 @@ CREATE TABLE "Doctor" (
     "specialty" TEXT,
     "profile_picture" TEXT,
     "phone_number" TEXT,
-    "address" TEXT,
+    "address" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "bio" TEXT,
 
     CONSTRAINT "Doctor_pkey" PRIMARY KEY ("id")
