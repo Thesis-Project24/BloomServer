@@ -5,33 +5,28 @@ const prisma=new PrismaClient();
 
 
 
-const signUp = async (req:Request,res:Response)=>{
-try {
-    const {email,first_name,last_name,username,phone_number}:User = req.body
-    const user = await prisma.user.findUnique({
-        where:{email}
-    })
-    if (user!==null) {
-        const user = await prisma.user.findUnique({
-            where:{email:req.body.email},
-        })
-
-
-        
-        return res.send(user);
-        
+const signUp = async (req: Request, res: Response) => {
+    try {
+      const { email, first_name, last_name, username, phone_number }: User = req.body;
+      const existingUser = await prisma.user.findUnique({
+        where: { email }
+      });
+  
+      if (existingUser !== null) {
+        return res.send(existingUser);
+      }
+  
+      const newUser = await prisma.user.create({
+        data: req.body
+      });
+  
+      return res.status(201).send(newUser);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({ error: "Internal Server Error"});
     }
-    const users =await prisma.user.create({
-        data:req.body
-    })
-    return res.status(201).send(users)
-} catch (error) {
-    console.log(error);
-    res.status(500).send(error)
-    
-    
-}
-}
+  };
+  
 const signIn = async (req: Request, res: Response) => {
     try {
         const user = await prisma.user.findUnique({
