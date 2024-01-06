@@ -8,7 +8,6 @@ const prisma=new PrismaClient();
 
 export const addDoctor = async (req:Request,res:Response)=>{
     const {email,first_name,last_name,phone_number,specialty,profile_picture,address}:Doctor = req.body
-
     try {
        
         const docBody : Doctor = {
