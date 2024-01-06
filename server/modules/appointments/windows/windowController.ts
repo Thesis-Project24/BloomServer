@@ -18,3 +18,14 @@ const addWindow =async(req:Request,res:Response)=> {
 
 
 export {addWindow}
+
+
+
+
+
+
+
+
+
+
+
