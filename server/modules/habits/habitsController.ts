@@ -53,6 +53,7 @@ export const assignHabit = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Habit already assigned to user" });
     }
     // const initTracker = Array.from({ length: 30 }, () => 0);
+    // change to create many 
     const trackHabit = await prisma.trackHabit.create({
       data: {
         habitId: habit.id,
@@ -66,7 +67,16 @@ export const assignHabit = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Internal server err ouch" });
   }
 };
-
+// {get all existing Habits}
+export const getAllHabits = async (req: Request, res: Response) => {
+  try {
+    const habits = await prisma.habit.findMany();
+    return res.status(200).json({ habits });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error :(" });
+  }
+};
 // {get all habits from specefic user} //
 
 export const getAllHabitsFromUser = async (req: Request, res: Response) => {
@@ -98,39 +108,71 @@ export const getAllHabitsFromUser = async (req: Request, res: Response) => {
 
 //  {helper to get the day of the week}
 function getDayOfWeek(date: Date): string {
-  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
   const dayIndex = date.getDay();
   return daysOfWeek[dayIndex];
 }
 // {tracker function }
-export const postSatisfaction =async (req:Request,res:Response) => {
+export const postSatisfaction = async (req: Request, res: Response) => {
   try {
-      const {habitId,userId,rating} = req.body
-      // check if the habit is assigned to the user first 
-      const trackHabit = await prisma.trackHabit.findFirst({
-          where : {
-              habitId,
-              userId
-          }
-      })
-      if(!trackHabit){
-          return res.status(404).json({error : 'Habit not assigned'})
-      }
-      const currentDate = new Date ()
-      const dayOfWeek= getDayOfWeek(currentDate)
-      const existingTracker = trackHabit.tracker
-      const updatedTracker = [...existingTracker,{dayOfWeek,rating}]
-      await prisma.trackHabit.update({
-          where : {
-              id:trackHabit.id,
-          },
-          data : {
-              tracker: updatedTracker
-          }as any
-      })
-      return res.status(200).json({success:'rating Submitted'})
-  }catch (error){
-      console.error(error);
-      return res.status(500).json({error: 'Internal server err'})
+    const { habitId, userId, rating } = req.body;
+    // check if the habit is assigned to the user first
+    const trackHabit = await prisma.trackHabit.findFirst({
+      where: {
+        habitId,
+        userId,
+      },
+    });
+    if (!trackHabit) {
+      return res.status(404).json({ error: "Habit not assigned" });
+    }
+    const currentDate = new Date();
+    const dayOfWeek = getDayOfWeek(currentDate);
+    const existingTracker = trackHabit.tracker;
+    const updatedTracker = [...existingTracker, { dayOfWeek, rating }];
+    await prisma.trackHabit.update({
+      where: {
+        id: trackHabit.id,
+      },
+      data: {
+        tracker: updatedTracker,
+      } as any,
+    });
+    return res.status(200).json({ success: "rating Submitted" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server err" });
   }
-}
+};
+// {Delete Habit assignement }
+export const deleteHabit = async (req: Request, res: Response) => {
+  try {
+    const { habitId, userId } = req.body;
+    const trackHabit = await prisma.trackHabit.findFirst({
+      where: {
+        habitId,
+        userId,
+      },
+    });
+    if (!trackHabit) {
+      return res.status(404).json({ error: "Habit assignment not found" });
+    }
+    await prisma.trackHabit.delete({
+      where: {
+        id: trackHabit.id,
+      },
+    });
+    return res.status(200).json({ success: "Habit assignment deleted" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
