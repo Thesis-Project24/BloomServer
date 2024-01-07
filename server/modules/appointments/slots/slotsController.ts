@@ -3,6 +3,8 @@ import { Request, Response } from 'express';
 import  {Slot,Window}  from "../../../types";
 const prisma = new PrismaClient()
 
+
+//add slots using (window info: consultation duration,pause, )
 const addSlots= async(req:Request,res:Response) => {
     try {
         //get window by id
@@ -48,10 +50,10 @@ const addSlots= async(req:Request,res:Response) => {
     }
 }
 
-
+// get all slots of a specific window
 const getSlots =async (req:Request,res:Response)=> {
     try {
-    const slots= await prisma.slot.findMany({
+    const slots:Slot[]= await prisma.slot.findMany({
         where:{
             windowId:Number(req.params.windowId)
         }
@@ -63,19 +65,19 @@ const getSlots =async (req:Request,res:Response)=> {
     }
 }
 
+//get a specific Slot
 const getSlot=async (req:Request,res:Response)=> {
-    // try {
-    //     console.log(req.params.slotId)
-    //     const slot = prisma.slot.findUnique({
-    //         where:{
-    //             id:Number(req.params.slotId)
-    //         }
-    //     })
-    //     res.send(slot)
-    // }
-    // catch(error) {
-    //     res.send(error)
-    // }
+    try {
+        const slot:Slot|null = await prisma.slot.findUnique({
+            where:{
+                id:Number(req.params.slotId)
+            }
+        })
+        res.send(slot)
+    }
+    catch(error) {
+        res.send(error)
+    }
 }
 
 
