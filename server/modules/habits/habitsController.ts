@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 export const creatHabit = async (req: Request, res: Response) => {
   try {
     const { name }: Habit = req.body;
-    const habit = await prisma.habit.create({
+    const habit= await prisma.habit.create({
       data: {
         name,
       },
