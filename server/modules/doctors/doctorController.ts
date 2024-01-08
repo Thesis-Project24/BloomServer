@@ -20,7 +20,7 @@ export const getDoctors = async (req:Request,res:Response)=>{
         const productId = JSON.parse(req.params.id);
         try {
             // findUnique
-            const doc = await prisma.doctor.findMany({
+            const doc = await prisma.doctor.findUnique({
                 where: {
                   id: productId,
                 },
