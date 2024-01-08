@@ -37,7 +37,7 @@ model Doctor {
   specialty String?
   profile_picture String?
   phone_number String?
-  address String?
+  address String[] @default([]) // Use a default empty array
   bio String?
   artices Article[]
   groups Group[]

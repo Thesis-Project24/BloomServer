@@ -18,7 +18,7 @@ interface Doctor {
     specialty: string
     profile_picture: string
     phone_number: string
-    address: string
+    address: string[]
     bio ? : string
 }
 
