@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 export const creatHabit = async (req: Request, res: Response) => {
   try {
     const { name }: Habit = req.body;
-    const habit = await prisma.habit.create({
+    const habit= await prisma.habit.create({
       data: {
         name,
       },
@@ -174,5 +174,56 @@ export const deleteHabit = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// {Multi Habits Assignement} //
+export const assignMultipleHabits = async (req: Request, res: Response) => {
+  try {
+    const { userId, habitIds }: { userId: number; habitIds: number[] } = req.body;
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user) {
+      return res.status(404).json({ error: "User not found :(" });
+    }
+    const habits = await prisma.habit.findMany({
+      where: {
+        id: {
+          in: habitIds,
+        },
+      },
+    });
+
+    if (habits.length !== habitIds.length) {
+      return res.status(404).json({ error: "Some habits not found" });
+    }
+    const existingTrackHabits = await prisma.trackHabit.findMany({
+      where: {
+        habitId: {
+          in: habitIds,
+        },
+        userId: user.id,
+      },
+    });
+
+    if (existingTrackHabits.length > 0) {
+      return res.status(400).json({ error: "Some habits are already assigned to the user" });
+    }
+
+    const trackHabits = await prisma.trackHabit.createMany({
+      data: habitIds.map((habitId) => ({
+        habitId,
+        userId: user.id,
+        tracker: [],
+      })),
+    });
+
+    return res.status(201).json({ trackHabits });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server err ouch" });
   }
 };
