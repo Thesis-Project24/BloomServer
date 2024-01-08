@@ -80,7 +80,11 @@ const getSlot=async (req:Request,res:Response)=> {
     }
 }
 
+const addWaitlist= ()=>{
+    
+}
 
 
 
-export {addSlots,getSlots,getSlot} 
+
+export {addSlots,getSlots,getSlot,addWaitlist} 
