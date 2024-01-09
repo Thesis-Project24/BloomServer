@@ -1,6 +1,6 @@
 import { PrismaClient, window } from '@prisma/client'
 import { Request, Response } from 'express';
-import  {Slot,Window}  from "../../../types";
+import  {Slot,User,Window}  from "../../../types";
 const prisma = new PrismaClient()
 
 
@@ -80,11 +80,53 @@ const getSlot=async (req:Request,res:Response)=> {
     }
 }
 
-const addWaitlist= ()=>{
-    
+//add a user to the waitlist while the slot is pending 
+const addWaitlist=async (req:Request,res:Response)=>{
+    let user = req.body
+    try {
+        await prisma.slot.update({
+            where:{
+                id: Number(req.params.slotId)
+            },
+            data:{
+                waitlist: {
+                    connect:req.body
+                }
+            }
+        })
+    }
+    catch(error){
+    }
+}
+
+const emptyWaitlist = async (req:Request,res:Response) =>{
+     try {
+        // find users in the slot waitlist using its id
+        // const users:User= prisma.user.findMany({
+        //     where:{
+        //         slots:{
+        //             path: ['id'],
+        //             equals: Number(req.params.slotId),
+        //         }
+        //     }
+        // })
+        //delete all users from waitlist in slot table
+        // await prisma.slot.update({
+        //     where:{
+        //         id: Number(req.params.slotId)
+        //     },
+        //     data:{
+        //         waitlist: {
+        //             disconnect:users
+        //         }
+        //     }
+        // })
+    }
+    catch(error) {
+     
+    }
 }
 
 
 
-
-export {addSlots,getSlots,getSlot,addWaitlist} 
+export {addSlots,getSlots,getSlot,addWaitlist,emptyWaitlist} 

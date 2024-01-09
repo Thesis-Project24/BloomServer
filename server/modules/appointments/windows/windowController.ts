@@ -7,24 +7,39 @@ const prisma = new PrismaClient()
 
 const addWindow =async(req:Request,res:Response)=> {
     try {
-        // console.log("hellooooooooo")    
-        console.log(req.body, "request body")
-            const windows =  await prisma.window.createMany({
+            await prisma.window.createMany({
             data: req.body
         })
-    
+        const windows = await prisma.window.findMany({
+        })
+        console.log(windows)
         res.send(windows)
     }
     catch(error) {
-        console.log(error);
-        
+        res.status(500).send(error)
+    }
+}
+
+const getWindowsBydate = async(req:Request,res:Response)=>{
+    let date= req.params.date
+    try {
+        // const windows = await prisma.window.findMany({
+        //     where:{
+        //         startingTime:{
+        //             contains:date 
+        //         }
+        //     }
+        // })
+        // res.send(windows)
+    }
+    catch(error) {
         res.status(500).send(error)
     }
 }
 
 
 
-export {addWindow}
+export {addWindow,getWindowsBydate}
 
 
 

@@ -24,6 +24,7 @@ CREATE TABLE "Doctor" (
     "phone_number" TEXT,
     "address" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "bio" TEXT,
+    "rate" INTEGER,
 
     CONSTRAINT "Doctor_pkey" PRIMARY KEY ("id")
 );
@@ -39,8 +40,8 @@ CREATE TABLE "Meds" (
 -- CreateTable
 CREATE TABLE "Journal" (
     "id" SERIAL NOT NULL,
-    "private" BOOLEAN NOT NULL DEFAULT true,
     "content" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
     "authorId" INTEGER NOT NULL,
 
     CONSTRAINT "Journal_pkey" PRIMARY KEY ("id")
@@ -135,7 +136,7 @@ CREATE TABLE "MedSchedule" (
     "medId" INTEGER NOT NULL,
     "userId" INTEGER NOT NULL,
     "quantity" INTEGER NOT NULL,
-    "schedule" TIMESTAMP(3) NOT NULL,
+    "schedule" TIMESTAMP(3)[],
 
     CONSTRAINT "MedSchedule_pkey" PRIMARY KEY ("id")
 );
