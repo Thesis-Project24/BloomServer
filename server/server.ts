@@ -33,8 +33,9 @@ app.use('/appointment/windows',windowRouter)
 app.use('/forum/comments',forumCommentRouter)
 app.use('/appointement/appointments',appointmentRouter)
 
-
-
+app.get("/",(req,res)=>{
+  res.send("helllo")
+})
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
