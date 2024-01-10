@@ -16,7 +16,7 @@ model User {
   profile_picture String?
   phone_number    String?
   age             Int?
-  mood            Int[]
+  mood            Json[]
   appointments    Appointment[]
   tags            Comment[]     @relation("tag")
   comments        Comment[]     @relation("author")
@@ -77,8 +77,8 @@ model Appointment {
 model Slot {
   id           Int          @id @default(autoincrement())
   windowId     Int
-  startingTime String
-  endingTime   String
+  startingTime DateTime
+  endingTime   DateTime
   appointment  Appointment?
   window       window       @relation(fields: [windowId], references: [id])
   waitlist     User[]       @relation("waitlist")
@@ -166,8 +166,8 @@ model TrackHabit {
 model window {
   id           Int      @id @default(autoincrement())
   doctorId     Int
-  startingTime String
-  endingTime   String
+  startingTime DateTime
+  endingTime   DateTime
   duration     Int
   pause        Int
   slots        Slot[]

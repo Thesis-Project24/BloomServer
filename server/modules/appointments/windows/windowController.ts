@@ -11,8 +11,6 @@ const addWindow =async(req:Request,res:Response)=> {
     try {
             await prisma.window.createMany({
             data: req.body,
-               
-            
         })
         const windows = await prisma.window.findMany({
             where:{
@@ -34,7 +32,7 @@ const getWindowsBydate = async(req:Request,res:Response)=>{
     try {
         const windows = await prisma.window.findMany({
             where:{
-                startingTime:{
+                startingTime:<any>{
                     contains:date
                 }
             }

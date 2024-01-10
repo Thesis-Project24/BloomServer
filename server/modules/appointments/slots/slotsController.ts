@@ -13,6 +13,7 @@ const addSlots= async(req:Request,res:Response) => {
                 id: Number(req.params.windowId)
             }
         })
+        console.log(window)
         //transform starting and ending time to ms
         let start = window?.startingTime.valueOf()
         let end = window?.endingTime.valueOf()
@@ -33,6 +34,7 @@ const addSlots= async(req:Request,res:Response) => {
                 startingTime:new Date(start),
                 endingTime:new Date (start + (x* 60000)),
             }
+            console.log(slot,"testwhile")
             //reasign window duration and start until we reach the end
             if(window?.duration){       
                 windowDuration = windowDuration- x + y
@@ -40,6 +42,7 @@ const addSlots= async(req:Request,res:Response) => {
             }  
             slots.push(slot)
         }
+           console.log(slots,"teeeee")
             //add slots to the database
             await prisma.slot.createMany({data:slots})
             res.send(slots)
