@@ -4,169 +4,172 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url  = "postgresql://postgres:root@localhost:5432/bloom"
+  url      = "postgresql://postgres:root@localhost:5432/bloom"
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  email String @unique
-  username String @unique
-  first_name String
-  last_name String
+  id              Int           @id @default(autoincrement())
+  email           String        @unique
+  username        String        @unique
+  first_name      String
+  last_name       String
   profile_picture String?
-  phone_number String?
-  age Int?
-  mood Int[]
-  journalPosts Journal[]
-  meds MedSchedule[]
-  appointments Appointment[]
-  forumPosts ForumPost[]
-  comments Comment[] @relation("author")
-  tags Comment[] @relation("tag")
-  groups Group[]
-  savedArticles SaveArticle[]
-  trackedHabits TrackHabit[]
-  slots Slot[] @relation("waitlist")
+  phone_number    String?
+  age             Int?
+  mood            Int[]
+  appointments    Appointment[]
+  tags            Comment[]     @relation("tag")
+  comments        Comment[]     @relation("author")
+  forumPosts      ForumPost[]
+  journalPosts    Journal[]
+  meds            MedSchedule[]
+  savedArticles   SaveArticle[]
+  trackedHabits   TrackHabit[]
+  groups          Group[]       @relation("GroupToUser")
+  slots           Slot[]        @relation("waitlist")
 }
 
 model Doctor {
-  id Int @id @default(autoincrement())
-  email String @unique
-  first_name String
-  last_name String
-  specialty String?
+  id              Int           @id @default(autoincrement())
+  email           String        @unique
+  first_name      String
+  last_name       String
+  specialty       String?
   profile_picture String?
-  phone_number String?
-  address String[] @default([])
-  bio String?
-  rate Int?
-  artices Article[]
-  groups Group[]
-  window window[]
-  appointment Appointment[]
+  phone_number    String?
+  address         String[]      @default([])
+  bio             String?
+  rate            Int?
+  appointment     Appointment[]
+  artices         Article[]
+  groups          Group[]
+  window          window[]
 }
 
 model Meds {
-  id Int @id @default(autoincrement())
-  name String  @unique
+  id        Int           @id @default(autoincrement())
+  name      String        @unique
   schedules MedSchedule[]
-  }
+}
 
 model Journal {
-  id Int @id @default(autoincrement())
-  content String
-  title String
-  author User @relation(fields: [authorId], references: [id])
+  id       Int    @id @default(autoincrement())
+  content  String
+  title    String
   authorId Int
+  author   User   @relation(fields: [authorId], references: [id])
 }
 
 model Appointment {
-  id Int @id @default(autoincrement())
-  patient User @relation(fields: [patientId],references: [id])
-  patientId Int
-  doctor Doctor @relation(fields: [doctorId],references: [id])
-  doctorId Int
-  appDetails String?
-  appStatus String @default("available")
-  appReview Int?
+  id          Int     @id @default(autoincrement())
+  patientId   Int
+  doctorId    Int
+  appDetails  String?
+  appStatus   String  @default("available")
+  appReview   Int?
   appFeedback String?
-  slot Slot @relation(fields: [slotId],references: [id])
-  slotId Int @unique
+  slotId      Int     @unique
+  doctor      Doctor  @relation(fields: [doctorId], references: [id])
+  patient     User    @relation(fields: [patientId], references: [id])
+  slot        Slot    @relation(fields: [slotId], references: [id])
 }
+
 model Slot {
-  id Int @id @default(autoincrement())
-  window window @relation(fields: [windowId],references: [id])
-  windowId Int
-  waitlist User[] @relation(name:"waitlist")
-  appointment Appointment?
-  startingTime DateTime
-  endingTime DateTime
+  id           Int          @id @default(autoincrement())
+  windowId     Int
+  startingTime String
+  endingTime   String
+  appointment  Appointment?
+  window       window       @relation(fields: [windowId], references: [id])
+  waitlist     User[]       @relation("waitlist")
 }
+
 model ForumPost {
-  id Int @id @default(autoincrement())
-  content String
-  upvote Int?
+  id       Int       @id @default(autoincrement())
+  content  String
+  upvote   Int?
   downvote Int?
-  author User @relation(fields: [authorId], references: [id])
   authorId Int
   comments Comment[]
-  flairs Flair[]
+  author   User      @relation(fields: [authorId], references: [id])
+  flairs   Flair[]   @relation("FlairToForumPost")
 }
 
 model Comment {
-  id Int @id @default(autoincrement())
-  content String
-  upvote Int?
-  downvote Int?
-  post ForumPost @relation(fields: [postId],references: [id])
-  postId Int
-  User User @relation(name: "author",fields: [userId],references: [id])
-  userId Int
-  taggedUser User? @relation(name: "tag",fields: [tagId],references: [id])
-  tagId Int?
+  id         Int       @id @default(autoincrement())
+  content    String
+  upvote     Int?
+  downvote   Int?
+  postId     Int
+  userId     Int
+  tagId      Int?
+  post       ForumPost @relation(fields: [postId], references: [id])
+  taggedUser User?     @relation("tag", fields: [tagId], references: [id])
+  User       User      @relation("author", fields: [userId], references: [id])
 }
 
 model Article {
-  id Int @id @default(autoincrement())
-  content String
-  author Doctor @relation(fields:[authorId],references: [id])
+  id       Int           @id @default(autoincrement())
+  content  String
   authorId Int
-  saved SaveArticle[]
+  author   Doctor        @relation(fields: [authorId], references: [id])
+  saved    SaveArticle[]
 }
 
 model Flair {
-id Int @id  @default(autoincrement())
-name String @unique
-posts ForumPost[]
+  id    Int         @id @default(autoincrement())
+  name  String      @unique
+  posts ForumPost[] @relation("FlairToForumPost")
 }
 
 model Group {
-  id Int @id @default(autoincrement())
-  name String 
-  doctor Doctor @relation(fields: [doctorId], references: [id])
-  doctorId Int
-  participants User[]
+  id           Int    @id @default(autoincrement())
+  name         String
+  doctorId     Int
+  doctor       Doctor @relation(fields: [doctorId], references: [id])
+  participants User[] @relation("GroupToUser")
 }
 
 model SaveArticle {
-  id Int@id @default(autoincrement())
-  article Article @relation(fields: [articleId], references: [id])
+  id        Int     @id @default(autoincrement())
   articleId Int
-  user User @relation(fields: [userId], references: [id])
-  userId Int
+  userId    Int
+  article   Article @relation(fields: [articleId], references: [id])
+  user      User    @relation(fields: [userId], references: [id])
 }
 
 model MedSchedule {
-  id Int @id @default(autoincrement())
-  medication Meds @relation(fields: [medId],references: [id])
-  medId Int
-  user User @relation(fields: [userId],references: [id])
-  userId Int
-  quantity Int
-  schedule DateTime[]
+  id         Int        @id @default(autoincrement())
+  medId      Int
+  userId     Int
+  quantity   Int
+  schedule   DateTime[]
+  medication Meds       @relation(fields: [medId], references: [id])
+  user       User       @relation(fields: [userId], references: [id])
 }
 
 model Habit {
-  id Int @id @default(autoincrement())
-  name String @unique
+  id       Int          @id @default(autoincrement())
+  name     String       @unique
   tracking TrackHabit[]
 }
 
-model TrackHabit  {
-  id Int @id @default(autoincrement())
-  habit Habit @relation(fields: [habitId], references: [id])
+model TrackHabit {
+  id      Int    @id @default(autoincrement())
   habitId Int
-  user User @relation(fields:[userId], references: [id])
-  userId Int
+  userId  Int
   tracker Json[]
+  habit   Habit  @relation(fields: [habitId], references: [id])
+  user    User   @relation(fields: [userId], references: [id])
 }
+
 model window {
-  id Int @id @default(autoincrement())
-  doctor Doctor @relation(fields: [doctorId],references: [id])
-  doctorId Int
-  startingTime DateTime
-  endingTime DateTime
-  duration Int
-  pause Int
-  slots Slot[]
+  id           Int      @id @default(autoincrement())
+  doctorId     Int
+  startingTime String
+  endingTime   String
+  duration     Int
+  pause        Int
+  slots        Slot[]
+  doctor       Doctor   @relation(fields: [doctorId], references: [id])
 }

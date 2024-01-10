@@ -5,6 +5,5 @@ const router = express.Router();
 router.post('/:windowId',addSlots)
 router.get('/:windowId',getSlots)
 router.get('/slot/:slotId',getSlot)
-router.put('/waitlist/empty/:slotId',addWaitlist)
 router.put('/waitlist/:slotId',addWaitlist)
 export default router;
