@@ -90,7 +90,8 @@ const addWaitlist=async (req:Request,res:Response)=>{
             },
             data:{
                 waitlist: {
-                    connect:req.body
+                    connect:req.body,
+                    
                 }
             }
         })
@@ -99,34 +100,8 @@ const addWaitlist=async (req:Request,res:Response)=>{
     }
 }
 
-const emptyWaitlist = async (req:Request,res:Response) =>{
-     try {
-        // find users in the slot waitlist using its id
-        // const users:User= prisma.user.findMany({
-        //     where:{
-        //         slots:{
-        //             path: ['id'],
-        //             equals: Number(req.params.slotId),
-        //         }
-        //     }
-        // })
-        //delete all users from waitlist in slot table
-        // await prisma.slot.update({
-        //     where:{
-        //         id: Number(req.params.slotId)
-        //     },
-        //     data:{
-        //         waitlist: {
-        //             disconnect:users
-        //         }
-        //     }
-        // })
-    }
-    catch(error) {
-     
-    }
-}
 
 
 
-export {addSlots,getSlots,getSlot,addWaitlist,emptyWaitlist} 
+
+export {addSlots,getSlots,getSlot,addWaitlist} 
