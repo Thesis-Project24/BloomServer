@@ -32,15 +32,17 @@ interface Journal {
 }
 
 interface Appointmenent {
-  id: number;
+  id?: number;
   patientId: number;
   doctorId: number;
-  appDetails: string;
-  appStatus: string;
-  appReview: number;
-  appFeedback: string;
+  appDetails?: string;
+  appStatus?: string;
+  appReview?: number;
+  appFeedback?: string;
   slotId: number;
 }
+
+
 
 interface Slot {
   id: number;
