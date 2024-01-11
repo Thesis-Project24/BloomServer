@@ -8,7 +8,7 @@ CREATE TABLE "User" (
     "profile_picture" TEXT,
     "phone_number" TEXT,
     "age" INTEGER,
-    "mood" INTEGER[],
+    "mood" JSONB[],
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -163,8 +163,8 @@ CREATE TABLE "TrackHabit" (
 CREATE TABLE "window" (
     "id" SERIAL NOT NULL,
     "doctorId" INTEGER NOT NULL,
-    "startingTime" TIMESTAMP(3) NOT NULL,
-    "endingTime" TIMESTAMP(3) NOT NULL,
+    "startingTime" TEXT NOT NULL,
+    "endingTime" TEXT NOT NULL,
     "duration" INTEGER NOT NULL,
     "pause" INTEGER NOT NULL,
 

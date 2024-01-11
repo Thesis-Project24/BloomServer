@@ -31,7 +31,7 @@ app.use('/appointment/slots',slotRouter)
 app.use('/forum/flairs',forumFlairRouter)
 app.use('/appointment/windows',windowRouter)
 app.use('/forum/comments',forumCommentRouter)
-app.use('/appointement/appointments',appointmentRouter)
+app.use('/appointemnt/appointments',appointmentRouter)
 
 app.get("/",(req,res)=>{
   res.send("helllo")

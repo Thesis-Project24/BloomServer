@@ -1,8 +1,7 @@
 import express from "express"
- import {addAppointmenent,updateAppStatus,updateAppFeedbackReview} from "./appointmentsController"
+ import {addAppointmenent,updateAppointmenent} from "./appointmentsController"
 const router = express.Router();
 router.post("/add",addAppointmenent);
-router.put("/updateStatus",updateAppStatus)
-router.put("/updateFeedbackReview",updateAppFeedbackReview)
+router.put("/update/:id",updateAppointmenent)
 
 export default router;

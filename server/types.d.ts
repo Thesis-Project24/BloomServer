@@ -116,8 +116,8 @@ interface TrackHabit {
 interface Window {
   id: number;
   doctorId: number;
-  startingTime: DateTime;
-  endingTime: DateTime;
+  startingTime: string;
+  endingTime: string;
   duration: number;
   pause: number;
 }
