@@ -1,24 +1,32 @@
 import { PrismaClient } from '@prisma/client'
 import { Request, Response } from 'express';
-import  Window from "../../../types";
+import  {Window,Slot} from "../../../types";
+import { addSlots } from '../slots/slotsController';
 const prisma = new PrismaClient()
 
 
-
+//create window with slots
 const addWindow =async(req:Request,res:Response)=> {
-    console.log("triggered");
-    
     try {
+        //create windows 
             await prisma.window.createMany({
             data: req.body,
         })
+        //get windows of a specific doctor
         const windows = await prisma.window.findMany({
             where:{
                 doctorId:Number(req.params.doctorId)
             }
         })
-        console.log(windows)
-        res.json(windows)
+        //create slots for every window
+        const slots = windows.map(window=>{
+               return addSlots(window)
+        })
+        //insert created slots in database
+        const slotsF = (slots.flat())
+        prisma.slot.createMany({data:slotsF}) 
+        //send the slots as a response(array of arrays)
+        res.json(slotsF)
     }
     catch(error) {
         res.status(500).send(error)
