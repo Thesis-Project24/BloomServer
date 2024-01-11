@@ -98,29 +98,29 @@ export const upDateDoc = async (req:Request,res:Response)=>{
 
     export const addReviewDoc= async(req:Request,res:Response)=>{
         try {
-            // const Appoint =await  prisma.appointment.findMany({
-            //     where:{
-            //         doctorId:Number(req.params.docotrId),
-            //         appReview: {
-            //             gte:0
-            //         }
-            //     }
-            // })
-            // const doctorReview= Appoint.reduce((review:number,app)=>{
-            //             return review=review +app.appReview
+            const Appoint =await  prisma.appointment.findMany({
+                where:{
+                    doctorId:Number(req.params.docotrId),
+                    appReview: {
+                        gte:0
+                    }
+                }
+            })
+            const doctorReview= Appoint.reduce((review:number,app)=>{
+                return review=review + app.appReview
         
-            // },0)
-            // const doctor = prisma.doctor.update({
-            //     where:{
-            //         id:Number(req.params.docotrId)
-            //     },
-            //     data:{
-            //         review:{
-            //             set:doctorReview/ Appoint.length
-            //         }
-            //     }
-            // })
-            // res.send(doctor)
+            },0)
+            const doctor = prisma.doctor.update({
+                where:{
+                    id:Number(req.params.docotrId)
+                },
+                data:{
+                    review:{
+                        set:doctorReview/ Appoint.length
+                    }
+                }
+            })
+            res.send(doctor)
         }
         catch(error){
         }

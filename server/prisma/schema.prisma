@@ -68,7 +68,7 @@ model Appointment {
   doctorId    Int
   appDetails  String?
   appStatus   String  @default("available")
-  appReview   Int? @default(0)
+  appReview   Int @default(0)
   appFeedback String?
   slotId      Int     @unique
   doctor      Doctor  @relation(fields: [doctorId], references: [id])
