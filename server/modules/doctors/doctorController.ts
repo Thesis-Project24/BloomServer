@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-import { Doctor } from "../../types";
+import {  PrismaClient } from "@prisma/client";
+import { Doctor , Appointmenent} from "../../types";
 import { Request, Response } from "express";
 
 const prisma=new PrismaClient();
@@ -94,4 +94,34 @@ export const upDateDoc = async (req:Request,res:Response)=>{
         
         
     }
+    }
+
+    export const addReviewDoc= async(req:Request,res:Response)=>{
+        try {
+            const Appoint =await  prisma.appointment.findMany({
+                where:{
+                    doctorId:Number(req.params.docotrId),
+                    appReview: {
+                        gte:0
+                    }
+                }
+            })
+            const doctorReview= Appoint.reduce((review:number,app)=>{
+                return review=review + app.appReview
+        
+            },0)
+            const doctor = prisma.doctor.update({
+                where:{
+                    id:Number(req.params.docotrId)
+                },
+                data:{
+                    review:{
+                        set:doctorReview/ Appoint.length
+                    }
+                }
+            })
+            res.send(doctor)
+        }
+        catch(error){
+        }
     }

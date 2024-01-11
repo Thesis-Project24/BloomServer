@@ -40,8 +40,10 @@ model Doctor {
   address         String[]      @default([])
   bio             String?
   rate            Int?
+  review          Int?
+  gender          String?
   appointment     Appointment[]
-  artices         Article[]
+  articles         Article[]
   groups          Group[]
   window          window[]
 }
@@ -66,7 +68,7 @@ model Appointment {
   doctorId    Int
   appDetails  String?
   appStatus   String  @default("available")
-  appReview   Int?
+  appReview   Int @default(0)
   appFeedback String?
   slotId      Int     @unique
   doctor      Doctor  @relation(fields: [doctorId], references: [id])
