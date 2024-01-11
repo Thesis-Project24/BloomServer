@@ -65,8 +65,8 @@ CREATE TABLE "Appointment" (
 CREATE TABLE "Slot" (
     "id" SERIAL NOT NULL,
     "windowId" INTEGER NOT NULL,
-    "startingTime" TIMESTAMP(3) NOT NULL,
-    "endingTime" TIMESTAMP(3) NOT NULL,
+    "startingTime" TEXT NOT NULL,
+    "endingTime" TEXT NOT NULL,
 
     CONSTRAINT "Slot_pkey" PRIMARY KEY ("id")
 );
@@ -163,8 +163,8 @@ CREATE TABLE "TrackHabit" (
 CREATE TABLE "window" (
     "id" SERIAL NOT NULL,
     "doctorId" INTEGER NOT NULL,
-    "startingTime" TIMESTAMP(3) NOT NULL,
-    "endingTime" TIMESTAMP(3) NOT NULL,
+    "startingTime" TEXT NOT NULL,
+    "endingTime" TEXT NOT NULL,
     "duration" INTEGER NOT NULL,
     "pause" INTEGER NOT NULL,
 
