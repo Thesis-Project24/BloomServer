@@ -32,7 +32,7 @@ const getWindowsBydate = async(req:Request,res:Response)=>{
     try {
         const windows = await prisma.window.findMany({
             where:{
-                startingTime:<any>{
+                startingTime:{
                     contains:date
                 }
             }
@@ -40,7 +40,9 @@ const getWindowsBydate = async(req:Request,res:Response)=>{
         res.json(windows)
     }
     catch(error) {
-        res.status(500).send(error)
+        console.log(error);
+        
+        res.send(error)
     }
 }
 

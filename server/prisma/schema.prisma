@@ -166,8 +166,8 @@ model TrackHabit {
 model window {
   id           Int      @id @default(autoincrement())
   doctorId     Int
-  startingTime DateTime
-  endingTime   DateTime
+  startingTime String
+  endingTime   String
   duration     Int
   pause        Int
   slots        Slot[]

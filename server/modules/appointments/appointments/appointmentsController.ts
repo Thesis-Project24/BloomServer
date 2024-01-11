@@ -20,7 +20,7 @@ export const addAppointmenent= async (req:Request,res:Response)=>{
 
 
     
-export const updateApp= async (req:Request,res:Response)=>{
+export const updateAppointmenent= async (req:Request,res:Response)=>{
     const {appStatus,appReview,appFeedback}:Appointmenent = req.body
     try {
         const app = await prisma.appointment.update({
