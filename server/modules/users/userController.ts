@@ -57,5 +57,36 @@ const deleteAccount=async(req:Request,res:Response)=>{
     }
 }
 
+const updateInfo = async(req:Request,res:Response)=>{
+try {
+    const user= await prisma.user.update({
+        where:{
+            id:Number(req.params.userId)
+        },
+        data:{
+            age:{
+                set:req.body.age
+            },
+            phone_number:{
+                set:req.body.phone_number
+            },
+            profile_picture:{
+                set:req.body.profile_picture
+            },
+            first_name:{
+                set:req.body.first_name
+            },
+            last_name:{
+                set:req.body.last_name
+            }
+        }
+    })
+    res.send(user)
+}
+catch(error) {
+    res.send(error)
+}
+}
 
-export {signUp,signIn,deleteAccount}
+
+export {signUp,signIn,deleteAccount,updateInfo}

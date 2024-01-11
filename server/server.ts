@@ -12,13 +12,43 @@ import forumFlairRouter from './modules/forum/flairs/flairsRoute'
 import appointmentRouter from './modules/appointments/appointments/appointmentsRoute'
 import slotRouter from './modules/appointments/slots/slotsRoute'
 import windowRouter from './modules/appointments/windows/windowsRoute'
+import http from "http";
+import { Server } from "socket.io";
 
-const app = express()
 
 
+
+const app = express();
 const port =3000;
 app.use(cors())
 app.use(express.json())
+
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "https://192.168.1.69:3000",
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log(`User Connected: ${socket.id}`);
+
+  socket.on("join_room", (data) => {
+    socket.join(data);
+    console.log(`User with ID: ${socket.id} joined room: ${data}`);
+  });
+
+  socket.on("send_message", (data) => {
+    socket.to(data.room).emit("receive_message", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User Disconnected", socket.id);
+  });
+});
+
 
 app.use('/users',userRouter)
 app.use('/meds/',medsRouter)
@@ -31,12 +61,16 @@ app.use('/appointment/slots',slotRouter)
 app.use('/forum/flairs',forumFlairRouter)
 app.use('/appointment/windows',windowRouter)
 app.use('/forum/comments',forumCommentRouter)
-app.use('/appointement/appointments',appointmentRouter)
+app.use('/appointemnt/appointments',appointmentRouter)
 
 app.get("/",(req,res)=>{
   res.send("helllo")
 })
 
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
+// app.listen(port, () => {
+//   console.log(`[server]: Server is running at http://localhost:${port}`);
+// });
+
+server.listen(3000, () => {
+  console.log("server is running");
 });

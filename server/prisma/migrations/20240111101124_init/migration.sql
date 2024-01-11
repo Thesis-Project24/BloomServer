@@ -8,7 +8,7 @@ CREATE TABLE "User" (
     "profile_picture" TEXT,
     "phone_number" TEXT,
     "age" INTEGER,
-    "mood" INTEGER[],
+    "mood" JSONB[],
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -65,8 +65,8 @@ CREATE TABLE "Appointment" (
 CREATE TABLE "Slot" (
     "id" SERIAL NOT NULL,
     "windowId" INTEGER NOT NULL,
-    "startingTime" TEXT NOT NULL,
-    "endingTime" TEXT NOT NULL,
+    "startingTime" TIMESTAMP(3) NOT NULL,
+    "endingTime" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Slot_pkey" PRIMARY KEY ("id")
 );

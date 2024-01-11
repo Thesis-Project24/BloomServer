@@ -8,33 +8,33 @@ const prisma = new PrismaClient()
 const addSlots= async(req:Request,res:Response) => {
     try {
         //get window by id
-        let  window :Window | null =  await prisma.window.findUnique({
+        let  [window] :Window[] = await prisma.window.findMany({
             where:{
                 id: Number(req.params.windowId)
             }
         })
         //transform starting and ending time to ms
-        let start = window?.startingTime.valueOf()
-        let end = window?.endingTime.valueOf()
+        let start = new Date(window.startingTime).valueOf()
+        let end = new Date(window.endingTime).valueOf()
         //calculate window duration in minutes
         let windowDuration = (end - start) / 60000
 
         let slots : any[] = []
-
         //asign consultation duration and pause to x and y  or maximum values in minutes
-        let x = window?.duration || 61
-        let y = window?.pause || 16
+        let x = window.duration || 61
+        let y = window.pause || 16
 
         //create slots
         while (start < end) {
             //each slot has the window id starting time and ending time (type dateTime)
             let slot={
-                windowId:window?.id,
+                windowId:window.id,
                 startingTime:new Date(start),
                 endingTime:new Date (start + (x* 60000)),
             }
+            console.log(slot,"testwhile")
             //reasign window duration and start until we reach the end
-            if(window?.duration){       
+            if(window.duration){       
                 windowDuration = windowDuration- x + y
                 start = start + ((x + y)*60000) 
             }  
@@ -91,7 +91,6 @@ const addWaitlist=async (req:Request,res:Response)=>{
             data:{
                 waitlist: {
                     connect:req.body,
-                    
                 }
             }
         })
