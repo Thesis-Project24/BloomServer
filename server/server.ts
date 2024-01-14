@@ -16,8 +16,6 @@ import http from "http";
 import { Server } from "socket.io";
 
 
-
-
 const app = express();
 const port =3000;
 app.use(cors())
@@ -27,7 +25,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://192.168.1.69:3000",
+    origin: "https://localhost:3000",
     methods: ["GET", "POST"],
   },
 });
@@ -67,10 +65,7 @@ app.get("/",(req,res)=>{
   res.send("helllo")
 })
 
-// app.listen(port, () => {
-//   console.log(`[server]: Server is running at http://localhost:${port}`);
-// });
-
-server.listen(3000, () => {
-  console.log("server is running");
+server.listen(port, () => {
+  console.log(`[server]: Server is running at http://localhost:${port}`);
 });
+
