@@ -24,8 +24,9 @@ const addWindow =async(req:Request,res:Response)=> {
         })
         //insert created slots in database
         const slotsF = (slots.flat())
-        prisma.slot.createMany({data:slotsF}) 
+        const response = await  prisma.slot.createMany({data:slotsF}) 
         //send the slots as a response(array of arrays)
+        console.log(response)
         res.json(slotsF)
     }
     catch(error) {
