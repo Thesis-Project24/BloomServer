@@ -12,7 +12,7 @@ export const addAppointmenent= async (req:Request,res:Response)=>{
         return res.send(app)
     } catch (error) {
         console.log(error);
-        res.status(500).send(error)
+        res.send(error)
         
         
     }
