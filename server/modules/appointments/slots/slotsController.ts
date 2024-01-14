@@ -4,12 +4,6 @@ import { Slot, User, Window } from "../../../types";
 const prisma = new PrismaClient();
 
 const addSlots = (window: Window) => {
-    //get window by id
-    // let  [window] :Window[] = await prisma.window.findMany({
-    //     where:{
-    //         id: Number(windowId)
-    //     }
-    // })
     //transform starting and ending time to ms
     let start = new Date(window.startingTime).valueOf();
     let end = new Date(window.endingTime).valueOf();
