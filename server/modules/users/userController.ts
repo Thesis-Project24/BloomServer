@@ -59,7 +59,7 @@ const deleteAccount=async(req:Request,res:Response)=>{
 
 const updateInfo = async(req:Request,res:Response)=>{
 try {
-    const user= await prisma.user.update({
+   const response= await prisma.user.update({
         where:{
             id:Number(req.params.userId)
         },
@@ -81,7 +81,7 @@ try {
             }
         }
     })
-    res.send(user)
+    res.send(response)
 }
 catch(error) {
     res.send(error)
