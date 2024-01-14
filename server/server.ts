@@ -12,13 +12,41 @@ import forumFlairRouter from './modules/forum/flairs/flairsRoute'
 import appointmentRouter from './modules/appointments/appointments/appointmentsRoute'
 import slotRouter from './modules/appointments/slots/slotsRoute'
 import windowRouter from './modules/appointments/windows/windowsRoute'
+import http from "http";
+import { Server } from "socket.io";
 
-const app = express()
 
-
+const app = express();
 const port =3000;
 app.use(cors())
 app.use(express.json())
+
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "https://localhost:3000",
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log(`User Connected: ${socket.id}`);
+
+  socket.on("join_room", (data) => {
+    socket.join(data);
+    console.log(`User with ID: ${socket.id} joined room: ${data}`);
+  });
+
+  socket.on("send_message", (data) => {
+    socket.to(data.room).emit("receive_message", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User Disconnected", socket.id);
+  });
+});
+
 
 app.use('/users',userRouter)
 app.use('/meds/',medsRouter)
@@ -37,6 +65,7 @@ app.get("/",(req,res)=>{
   res.send("helllo")
 })
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
+
