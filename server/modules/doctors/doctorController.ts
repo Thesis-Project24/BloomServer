@@ -17,12 +17,12 @@ export const getDoctors = async (req:Request,res:Response)=>{
     }
 
     export const getOneDoc = async (req:Request,res:Response)=>{
-        const productId = JSON.parse(req.params.id);
+        const id = JSON.parse(req.params.id);;
         try {
 
             const doc = await prisma.doctor.findUnique({
                 where: {
-                  id: productId,
+                  id: id,
                 },
               })
             return res.json(doc)
@@ -125,3 +125,35 @@ export const upDateDoc = async (req:Request,res:Response)=>{
         catch(error){
         }
     }
+ 
+    export const getDocSpecialist = async (req:Request,res:Response)=>{
+        const {specialty} = req.params
+        try {
+
+            const doc = await prisma.doctor.findMany({
+                where: {
+                 specialty: specialty,
+                },
+              })
+            return res.json(doc)
+        } catch (error) {
+            console.log(error);
+            res.status(500).send(error);
+        }
+        }
+
+        export const getDocGender = async (req:Request,res:Response)=>{
+            const {gender} = req.params
+            try {
+    
+                const doc = await prisma.doctor.findMany({
+                    where: {
+                        gender: gender,
+                    },
+                  })
+                return res.json(doc)
+            } catch (error) {
+                console.log(error);
+                res.status(500).send(error);
+            }
+            }
