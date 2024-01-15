@@ -89,4 +89,20 @@ catch(error) {
 }
 
 
-export {signUp,signIn,deleteAccount,updateInfo}
+const getOne = async (req: Request, res: Response) => {
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: Number(req.params.userId),
+      },
+    });
+    console.log(user, "backkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+    return res.json(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+};
+
+export { signUp, signIn, deleteAccount, updateInfo, getOne };
