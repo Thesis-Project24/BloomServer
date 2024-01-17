@@ -3,8 +3,7 @@ CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
     "username" TEXT NOT NULL,
-    "first_name" TEXT NOT NULL,
-    "last_name" TEXT NOT NULL,
+    "fullName" TEXT,
     "profile_picture" TEXT,
     "phone_number" TEXT,
     "age" INTEGER,
@@ -76,9 +75,11 @@ CREATE TABLE "Slot" (
 -- CreateTable
 CREATE TABLE "ForumPost" (
     "id" SERIAL NOT NULL,
+    "title" TEXT NOT NULL,
     "content" TEXT NOT NULL,
-    "upvote" INTEGER,
-    "downvote" INTEGER,
+    "image" TEXT,
+    "upvote" INTEGER DEFAULT 0,
+    "downvote" INTEGER DEFAULT 0,
     "authorId" INTEGER NOT NULL,
 
     CONSTRAINT "ForumPost_pkey" PRIMARY KEY ("id")
@@ -88,8 +89,8 @@ CREATE TABLE "ForumPost" (
 CREATE TABLE "Comment" (
     "id" SERIAL NOT NULL,
     "content" TEXT NOT NULL,
-    "upvote" INTEGER,
-    "downvote" INTEGER,
+    "upvote" INTEGER DEFAULT 0,
+    "downvote" INTEGER DEFAULT 0,
     "postId" INTEGER NOT NULL,
     "userId" INTEGER NOT NULL,
     "tagId" INTEGER,
@@ -102,7 +103,6 @@ CREATE TABLE "Article" (
     "id" SERIAL NOT NULL,
     "content" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "picture_url" TEXT NOT NULL,
     "authorId" INTEGER NOT NULL,
     "createdAt" TEXT NOT NULL,
 
