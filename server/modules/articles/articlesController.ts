@@ -96,6 +96,10 @@ export const saveArticle = async (req: Request, res: Response) => {
   const { userId, articleId } = req.body;
 
   try {
+    const existing = await prisma.saveArticle.findMany({where:{userId,articleId}})
+    if(existing) {
+      res.send("article already saved")
+    }
     const saveArticle = await prisma.saveArticle.create({
       data: {
         userId,
