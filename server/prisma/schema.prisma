@@ -111,12 +111,16 @@ model Comment {
 }
 
 model Article {
-  id       Int           @id @default(autoincrement())
-  content  String
-  authorId Int
-  author   Doctor        @relation(fields: [authorId], references: [id])
-  saved    SaveArticle[]
+  id           Int          @id @default(autoincrement())
+  content      String
+  title        String
+  picture_url  String
+  authorId     Int
+  author       Doctor       @relation(fields: [authorId], references: [id])
+  saved        SaveArticle[]
+  createdAt    String
 }
+
 
 model Flair {
   id    Int         @id @default(autoincrement())

@@ -6,13 +6,20 @@ const prisma = new PrismaClient();
 //  {Article Creation}  //
 
 export const createArticle = async (req: Request, res: Response) => {
-  const { content, authorId } = req.body;
+  const currentDate = new Date();
+
+
+  const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+  const { content, authorId,title,picture_url } = req.body;
 
   try {
     const article = await prisma.article.create({
       data: {
+        title,
         content,
         authorId,
+        picture_url,
+        createdAt: formattedDate,
       },
     });
 
@@ -46,7 +53,35 @@ export const getAllArticles = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Internal Server Error :(" });
   }
 };
-
+// {one article fetcher}  // 
+export const getArticleById = async (req:Request, res:Response) => {
+  const { id } = req.body;
+  try {
+   const article = await prisma.article.findUnique({
+     where: {
+       id: Number(id),
+     },
+     include: {
+       author: {
+         select: {
+           first_name: true,
+           last_name: true,
+           specialty: true,
+           profile_picture: true,
+         },
+       },
+     },
+   });
+   if (!article) {
+     return res.status(404).json({ error: "Article not found" });
+   }
+   return res.status(200).json({ article });
+  } catch (error) {
+   console.error(error);
+   return res.status(500).json({ error: "Internal Server Error :(" });
+  }
+ };
+ 
 // {Article saved} //
 
 export const saveArticle = async (req: Request, res: Response) => {
@@ -99,6 +134,10 @@ export const searchArticles = async (req: Request, res: Response) => {
     const articles = await prisma.article.findMany({
       where: {
         content: {
+          contains: keyword,
+          mode: "insensitive",
+        },
+        title: {
           contains: keyword,
           mode: "insensitive",
         },
