@@ -18,7 +18,6 @@ export const createArticle = async (req: Request, res: Response) => {
         title,
         content,
         authorId,
-        picture_url,
         createdAt: formattedDate,
       },
     });
