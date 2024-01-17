@@ -62,7 +62,16 @@ const addF = async (req:Request,res:Response)=> {
     }
     }
 
-
+//////////////////////////////////:delete post////////////////////////////////////:
+const deletePost = async (req:Request,res:Response)=> {
+  try {
+    await prisma.forumPost.delete({where:{id:Number(req.params.id)}})
+    res.send("deleted")
+  }
+  catch(error){
+    res.send(error)
+  }
+}
 //////////////////////////////upvote post /////////////////////////////////////
 const upvotePost = async (req:Request,res:Response)=> {
     try {
@@ -105,4 +114,4 @@ const upvotePost = async (req:Request,res:Response)=> {
 
 
 
-export {getAllF,addF,addFlairToPost,upvotePost,downvotePost}
+export {getAllF,addF,addFlairToPost,upvotePost,downvotePost,deletePost}

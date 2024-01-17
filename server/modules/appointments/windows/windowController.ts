@@ -5,7 +5,7 @@ import { addSlots } from '../slots/slotsController';
 const prisma = new PrismaClient()
 
 
-//create window with slots
+//////////////////////create window with slots/////////////////////////////////////
 const addWindow =async(req:Request,res:Response)=> {
     try {
         //create windows 
@@ -35,7 +35,7 @@ const addWindow =async(req:Request,res:Response)=> {
 }
 
 
-//get the windows of a specific day (date)
+//////////////////////get the windows of a specific day (date) ///////////////////////
 const getWindowsBydate = async(req:Request,res:Response)=>{
     let date= req.params.date
     try {

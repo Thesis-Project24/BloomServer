@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { Request, Response, response } from "express";
 const prisma=new PrismaClient();
 
+
 export const getAllPosts = async (req: Request, res: Response) => {
     const { authorId } = req.params;
     
@@ -15,6 +16,8 @@ export const getAllPosts = async (req: Request, res: Response) => {
         res.status(500).send("Internal Server Error");
     }
 }
+
+
 export const getOnePost = async (req: Request, res: Response) => {
 const {id} = req.params;
 const {authorId} = req.params;
@@ -30,9 +33,6 @@ try {
             res.status(500).send(error);
         }
 }
-
-
-
 
 export const removePost=async(req:Request, res: Response) => {
     const { authorId } = req.params;
