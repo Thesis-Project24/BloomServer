@@ -11,16 +11,16 @@ interface User {
 }
 
 interface Doctor {
-    id ? : number
-    email: string 
-    first_name: string
-    last_name: string
-    specialty: string
-    review? :number
-    profile_picture: string
-    phone_number: string
-    address: string[]
-    bio ? : string
+  id?: number;
+  email: string;
+  first_name: string;
+  last_name: string;
+  specialty: string;
+  review?: number;
+  profile_picture: string;
+  phone_number: string;
+  address: string[];
+  bio?: string;
 }
 
 interface Meds {
@@ -43,13 +43,11 @@ interface Appointmenent {
   slotId: number;
 }
 
-
-
 interface Slot {
   id: number;
   windowId: number;
-  startingTime: dateTime
-  endingTime: dateTime
+  startingTime: dateTime;
+  endingTime: dateTime;
 }
 
 interface ForumPost {
@@ -72,8 +70,12 @@ interface Comment {
 
 interface Article {
   id: number;
+  title: string;
   content: string;
   authorId: number;
+  picture_url: string;
+  createdAt?: string;  
+ 
 }
 
 interface Flair {
@@ -139,5 +141,5 @@ export {
   Comment,
   Flair,
   forumPost,
-  Group
+  Group,
 };
