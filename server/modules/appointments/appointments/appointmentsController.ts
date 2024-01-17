@@ -4,6 +4,8 @@ import { Request, Response } from "express";
 
 const prisma=new PrismaClient();
 
+
+////////////////////////add appointement status unchanged ///////////////////////////:
 export const addAppointmenent= async (req:Request,res:Response)=>{
     try {
         const app = await prisma.appointment.create({
@@ -19,7 +21,7 @@ export const addAppointmenent= async (req:Request,res:Response)=>{
     }
 
 
-    
+/////////////////////////update appointement status/review/feedback///////////////////
 export const updateAppointmenent= async (req:Request,res:Response)=>{
     const {appStatus,appReview,appFeedback}:Appointmenent = req.body
     try {
