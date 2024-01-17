@@ -3,21 +3,19 @@ import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
 
-//  {Article Creation}  //
 
+/////////////////////////////////////create article/////////////////////////////////
 export const createArticle = async (req: Request, res: Response) => {
+
   const currentDate = new Date();
-
-
   const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
-  const { content, authorId,title } = req.body;
-
+  const { content, authorId,title}  = req.body;
+  console.log(req.body);
+  
   try {
     const article = await prisma.article.create({
       data: {
-        title,
-        content,
-        authorId,
+        ...req.body,
         createdAt: formattedDate,
       },
     });
@@ -29,8 +27,8 @@ export const createArticle = async (req: Request, res: Response) => {
   }
 };
 
-//   {All articles fetcher} //
 
+/////////////////////////////////get all articles/////////////////////////////////////
 export const getAllArticles = async (req: Request, res: Response) => {
   try {
     const article = await prisma.article.findMany({
@@ -52,7 +50,8 @@ export const getAllArticles = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Internal Server Error :(" });
   }
 };
-// {one article fetcher}  // 
+
+///////////////////////////////////get one article//////////////////////////////////////
 export const getArticleById = async (req:Request, res:Response) => {
   const { id } = req.body;
   try {
@@ -81,8 +80,17 @@ export const getArticleById = async (req:Request, res:Response) => {
   }
  };
  
-// {Article saved} //
-
+///////////////////////////////delete an article/////////////////////////////////:
+export const deleteArticle = async (req:Request, res:Response)=> {
+  try {
+    await prisma.article.delete({where:{id:Number(req.params.id)}})
+    res.send("deleted")
+  }
+  catch(error){
+    res.send(error)
+  }
+}
+///////////////////////// add article to saved list of one user//////////////////////////
 export const saveArticle = async (req: Request, res: Response) => {
   const { userId, articleId } = req.body;
 
@@ -100,8 +108,7 @@ export const saveArticle = async (req: Request, res: Response) => {
   }
 };
 
-// {Article saved fetcher } //
-
+////////////////////////////////////get all saved articles of one user////////////////////////:
 export const getSavedArticle = async (req: Request, res: Response) => {
   const { userId } = req.body;
   try {
@@ -120,8 +127,8 @@ export const getSavedArticle = async (req: Request, res: Response) => {
   }
 };
 
-// {Search Articles} //
 
+///////////////////////////////////search articles///////////////////////////////////
 export const searchArticles = async (req: Request, res: Response) => {
   const { keyword } = req.body;
   try {

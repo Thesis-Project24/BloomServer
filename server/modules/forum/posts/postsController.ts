@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 
 const prisma=new PrismaClient();
 
+///////////////////////////get all forums posts/////////////////////////////////////
 const getAllF = async (req:Request,res:Response)=> {
 try {
     const forumPosts = await prisma.forumPost.findMany({})
@@ -14,6 +15,7 @@ catch (error){
 }
 }
 
+///////////////////////////////add forum post with one flair//////////////////////////////////////
 const addF = async (req:Request,res:Response)=> {
     try {
         //create post
@@ -38,6 +40,7 @@ const addF = async (req:Request,res:Response)=> {
     }
     }
 
+////////////////////////////update post to add flairs///////////////////////////////:
    const  addFlairToPost = async (req:Request,res:Response)=> {
     try {
         const updateForum = await prisma.forumPost.update({
@@ -59,6 +62,8 @@ const addF = async (req:Request,res:Response)=> {
     }
     }
 
+
+//////////////////////////////upvote post /////////////////////////////////////
 const upvotePost = async (req:Request,res:Response)=> {
     try {
         const updateForum = await prisma.forumPost.update({
@@ -78,7 +83,7 @@ const upvotePost = async (req:Request,res:Response)=> {
     }
     }
 
-    
+//////////////////////////////downvote post /////////////////////////////////////
     const downvotePost = async (req:Request,res:Response)=> {
         try {
             const updateForum = await prisma.forumPost.update({
