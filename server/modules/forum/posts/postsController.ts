@@ -1,5 +1,4 @@
 import { ForumPost, PrismaClient } from "@prisma/client";
-import { Appointmenent } from "../../../types";
 import { Request, Response } from "express";
 
 const prisma=new PrismaClient();
