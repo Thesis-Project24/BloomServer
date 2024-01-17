@@ -3,7 +3,10 @@ import { Request, Response } from "express";
 import { Slot, User, Window } from "../../../types";
 const prisma = new PrismaClient();
 
+
+//////////////////////////////transform window to slots///////////////////////////////////
 const addSlots = (window: Window) => {
+
     //transform starting and ending time to ms
     let start = new Date(window.startingTime).valueOf();
     let end = new Date(window.endingTime).valueOf();
@@ -34,7 +37,7 @@ const addSlots = (window: Window) => {
     return slots;
 };
 
-// get all slots of a specific window
+//////////////////////get all slots of a specific window//////////////////////////////
 const getSlots = async (req: Request, res: Response) => {
     try {
         const slots: Slot[] = await prisma.slot.findMany({
@@ -48,7 +51,7 @@ const getSlots = async (req: Request, res: Response) => {
     }
 };
 
-//get a specific Slot
+//////////////////////////////////get a specific Slot//////////////////////////////
 const getSlot = async (req: Request, res: Response) => {
     try {
         const slot: Slot | null = await prisma.slot.findUnique({
@@ -62,7 +65,7 @@ const getSlot = async (req: Request, res: Response) => {
     }
 };
 
-//add a user to the waitlist while the slot is pending
+/////////////////add a user to the waitlist while the appointement is pending////////////////
 const addWaitlist = async (req: Request, res: Response) => {
     let user = req.body;
     try {

@@ -1,8 +1,8 @@
 import express from 'express'
-import { assignHabit, assignMultipleHabits, creatHabit, deleteHabit, getAllHabits, getAllHabitsFromUser, postSatisfaction } from './habitsController';
+import { assignHabit, assignMultipleHabits, createHabit, deleteHabit, getAllHabits, getAllHabitsFromUser, postSatisfaction } from './habitsController';
 const router = express.Router();
 
-router.post("/createhabit",creatHabit)
+router.post("/createhabit",createHabit)
 router.post("/assignHabit",assignHabit)
 router.post("/assignMultiHabits",assignMultipleHabits)
 router.get("/getHabits/:id",getAllHabitsFromUser)
