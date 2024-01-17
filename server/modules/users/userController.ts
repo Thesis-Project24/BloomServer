@@ -7,7 +7,7 @@ const prisma=new PrismaClient();
 
 const signUp = async (req:Request,res:Response)=>{
 try {
-    const {email,first_name,last_name,username,phone_number}:User = req.body
+    const {email,username,fullName}:User = req.body
     const user = await prisma.user.findUnique({
         where:{email}
     })
@@ -19,7 +19,12 @@ try {
         
     }
     const users =await prisma.user.create({
-        data:req.body
+        data:{
+           email,
+           username,
+           fullName ,
+        }
+        
     })
     return res.status(201).send(users)
 } catch (error) {
@@ -73,12 +78,6 @@ try {
             profile_picture:{
                 set:req.body.profile_picture
             },
-            first_name:{
-                set:req.body.first_name
-            },
-            last_name:{
-                set:req.body.last_name
-            }
         }
     })
     res.send(response)
