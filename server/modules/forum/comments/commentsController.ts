@@ -44,5 +44,17 @@ const deleteComment = async (req:Request, res:Response) => {
         res.send(error);
     }
 }
+const editComment = async (req:Request, res:Response) =>  {
+    try {
+        const comment = prisma.comment.update({
+            where:{id:Number(req.params.id)},
+            data:req.body
+        })
+        res.send(comment)
+    }
+    catch(error){
+        res.send(error)
+    }
+}
 
-export { addComment, getCommentsByPost,getCommentsByTaggedUser,deleteComment };
+export { addComment, getCommentsByPost,getCommentsByTaggedUser,deleteComment,editComment };

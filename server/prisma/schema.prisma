@@ -149,7 +149,7 @@ model MedSchedule {
   medId      Int
   userId     Int
   quantity   Int
-  schedule   DateTime[]
+  schedule   String[]
   medication Meds       @relation(fields: [medId], references: [id])
   user       User       @relation(fields: [userId], references: [id])
 }

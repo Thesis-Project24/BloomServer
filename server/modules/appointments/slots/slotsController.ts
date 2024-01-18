@@ -31,7 +31,6 @@ const addSlots = (window: Window) => {
             windowDuration = windowDuration - x + y;
             start = start + (x + y) * 60000;
         }
-        console.log(slots);
         slots.push(slot);
     }
     return slots;
@@ -81,5 +80,8 @@ const addWaitlist = async (req: Request, res: Response) => {
         });
     } catch (error) {}
 };
+
+
+
 
 export { addSlots, getSlots, getSlot, addWaitlist };
