@@ -99,7 +99,7 @@ interface MedSchedule {
   medId: number;
   userId: number;
   quantity: number;
-  schedule: DateTime;
+  schedule: DateTime[];
 }
 
 interface Habit {

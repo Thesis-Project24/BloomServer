@@ -22,6 +22,29 @@ const getAllF = async (req: Request, res: Response) => {
     }
 };
 
+/////////////////////////////////////get one post///////////////////////////////////////
+const getOneF = async (req: Request, res: Response) => {
+    try {
+        const forumPost = await prisma.forumPost.findUnique({
+            where:{
+                id:Number(req.params.id)
+            },
+            include: {
+                author: {
+                    select: {
+                        fullName: true,
+                        profile_picture: true,
+                    },
+                },
+                comments:true
+            },
+        });
+        res.send(forumPost);
+    } catch (error) {
+        res.send(error);
+    }
+};
+
 ///////////////////////////////add forum post with one flair//////////////////////////////////////
 const addF = async (req: Request, res: Response) => {
     try {
@@ -116,4 +139,6 @@ const downvotePost = async (req: Request, res: Response) => {
     }
 };
 
-export { getAllF, addF, addFlairToPost, upvotePost, downvotePost, deletePost };
+
+
+export { getAllF, addF, addFlairToPost, upvotePost, downvotePost, deletePost,getOneF };

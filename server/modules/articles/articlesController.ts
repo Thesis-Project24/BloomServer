@@ -122,13 +122,27 @@ export const getSavedArticle = async (req: Request, res: Response) => {
         userId: userId,
       },
       include: {
-        article: true,
+        article: {
+          select: {
+            content: true,
+            title: true,
+            createdAt:true,
+            author: {
+              select: {
+                first_name: true,
+                last_name: true,
+                specialty: true,
+                profile_picture: true,
+              },
+            },
+          },
+        },
       },
     });
     res.status(200).json(savedArticle);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal server error :( " });
+    res.status(500).json({ error: "Internal server error 😦 " });
   }
 };
 
