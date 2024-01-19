@@ -1,8 +1,9 @@
 import express from 'express'
-import { addF, addFlairToPost, downvotePost, getAllF, upvotePost,deletePost } from './postsController';
+import { addF, addFlairToPost, downvotePost, getAllF, upvotePost,deletePost, getOneF } from './postsController';
 const router = express.Router();
 
 router.get("/",getAllF)
+router.get("/:id",getOneF)
 router.post("/:flair",addF)
 router.put("/upvote",upvotePost)
 router.put("/downvote",downvotePost)
