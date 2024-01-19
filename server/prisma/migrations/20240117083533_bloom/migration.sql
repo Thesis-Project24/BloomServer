@@ -77,6 +77,7 @@ CREATE TABLE "ForumPost" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
     "content" TEXT NOT NULL,
+    "image" TEXT,
     "upvote" INTEGER DEFAULT 0,
     "downvote" INTEGER DEFAULT 0,
     "authorId" INTEGER NOT NULL,
@@ -101,7 +102,9 @@ CREATE TABLE "Comment" (
 CREATE TABLE "Article" (
     "id" SERIAL NOT NULL,
     "content" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
     "authorId" INTEGER NOT NULL,
+    "createdAt" TEXT NOT NULL,
 
     CONSTRAINT "Article_pkey" PRIMARY KEY ("id")
 );

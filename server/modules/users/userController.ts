@@ -78,6 +78,9 @@ try {
             profile_picture:{
                 set:req.body.profile_picture
             },
+            fullName:{
+                set:req.body.fullName
+            }
         }
     })
     res.send(response)

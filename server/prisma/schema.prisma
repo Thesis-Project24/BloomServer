@@ -87,10 +87,11 @@ model Slot {
 
 model ForumPost {
   id       Int       @id @default(autoincrement())
-  title String
+  title    String
   content  String
-  upvote   Int? @default(0)
-  downvote Int? @default(0)
+  image    String?
+  upvote   Int?    @default(0)
+  downvote Int?     @default(0)
   authorId Int
   comments Comment[]
   author   User      @relation(fields: [authorId], references: [id])
@@ -100,8 +101,8 @@ model ForumPost {
 model Comment {
   id         Int       @id @default(autoincrement())
   content    String
-  upvote     Int? @default(0)
-  downvote   Int? @default(0)
+  upvote     Int?       @default(0)
+  downvote   Int?       @default(0)
   postId     Int
   userId     Int
   tagId      Int?
@@ -111,12 +112,15 @@ model Comment {
 }
 
 model Article {
-  id       Int           @id @default(autoincrement())
-  content  String
-  authorId Int
-  author   Doctor        @relation(fields: [authorId], references: [id])
-  saved    SaveArticle[]
+  id           Int          @id @default(autoincrement())
+  content      String
+  title        String
+  authorId     Int
+  author       Doctor       @relation(fields: [authorId], references: [id])
+  saved        SaveArticle[]
+  createdAt    String
 }
+
 
 model Flair {
   id    Int         @id @default(autoincrement())

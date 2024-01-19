@@ -4,9 +4,20 @@ import { Request, Response } from "express";
 
 const prisma=new PrismaClient();
 
+///////////////////////////get all forums posts/////////////////////////////////////
 const getAllF = async (req:Request,res:Response)=> {
 try {
-    const forumPosts = await prisma.forumPost.findMany({})
+    const forumPosts = await prisma.forumPost.findMany({
+
+        include: {
+          author: {
+            select : {
+              username:true,
+              profile_picture:true,
+            }
+          }
+        }
+    })
     res.send(forumPosts)
 }
 catch (error){
@@ -14,6 +25,7 @@ catch (error){
 }
 }
 
+///////////////////////////////add forum post with one flair//////////////////////////////////////
 const addF = async (req:Request,res:Response)=> {
     try {
         //create post
@@ -38,6 +50,7 @@ const addF = async (req:Request,res:Response)=> {
     }
     }
 
+////////////////////////////update post to add flairs///////////////////////////////:
    const  addFlairToPost = async (req:Request,res:Response)=> {
     try {
         const updateForum = await prisma.forumPost.update({
@@ -59,6 +72,8 @@ const addF = async (req:Request,res:Response)=> {
     }
     }
 
+
+//////////////////////////////upvote post /////////////////////////////////////
 const upvotePost = async (req:Request,res:Response)=> {
     try {
         const updateForum = await prisma.forumPost.update({
@@ -78,7 +93,7 @@ const upvotePost = async (req:Request,res:Response)=> {
     }
     }
 
-    
+//////////////////////////////downvote post /////////////////////////////////////
     const downvotePost = async (req:Request,res:Response)=> {
         try {
             const updateForum = await prisma.forumPost.update({
@@ -98,6 +113,22 @@ const upvotePost = async (req:Request,res:Response)=> {
         }
         }
 
+        const addForum = async(req:Request,res:Response)=>{
+const {content,authorId,title}=req.body
+try {
+  const post = await prisma.forumPost.create({
+    data: {
+      content,
+      authorId,
+      title
+    }
+  })
+  res.status(200).send(post)
+} catch (error) {
+  console.error(error)
+  res.status(500).json({error: 'error creating forum'})
+}
+        }
 
 
-export {getAllF,addF,addFlairToPost,upvotePost,downvotePost}
+export {getAllF,addF,addFlairToPost,upvotePost,downvotePost,addForum}
