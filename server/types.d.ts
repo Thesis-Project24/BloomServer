@@ -116,7 +116,7 @@ interface TrackHabit {
 }
 
 interface Window {
-  id: number;
+  id?: number;
   doctorId: number;
   startingTime: string;
   endingTime: string;

@@ -45,6 +45,7 @@ model Doctor {
   articles         Article[]
   groups          Group[]
   window          window[]
+  scheduledwindow Scheduledwindow[]
 }
 
 model Meds {
@@ -178,5 +179,15 @@ model window {
   duration     Int
   pause        Int
   slots        Slot[]
+  doctor       Doctor   @relation(fields: [doctorId], references: [id])
+}
+
+model Scheduledwindow {
+  id           Int      @id @default(autoincrement())
+  doctorId     Int
+  startingTime String
+  endingTime   String
+  duration     Int
+  pause        Int
   doctor       Doctor   @relation(fields: [doctorId], references: [id])
 }

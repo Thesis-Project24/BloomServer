@@ -8,20 +8,13 @@ const prisma = new PrismaClient();
 const addWindow = async (req: Request, res: Response) => {
     try {
         //create windows
-        const windows = req.body
-        // should be implemented the same way as createSchedule
-        // await prisma.window.createMany({
-        //     data: req.body,
-        // });
+        const windows = req.body;
+        //create and return windows
         const windowsDb = await prisma.$transaction(
-            windows.map((window: Window) => prisma.window.create({ data: window }))
+            windows.map((window: Window) =>
+                prisma.window.create({ data: window })
+            )
         );
-        //get windows of a specific doctor
-        // const windows = await prisma.window.findMany({
-        //     where: {
-        //         doctorId: Number(req.params.doctorId),
-        //     },
-        // });
         //create slots for every window
         const slots = windowsDb.map((window) => {
             return addSlots(window);
@@ -36,9 +29,8 @@ const addWindow = async (req: Request, res: Response) => {
     }
 };
 
-//////////////////////get the windows of a specific day (date) ///////////////////////
+//////////////////////get the windows of a specific day and doctor (date) ///////////////////////
 const getWindowsBydate = async (req: Request, res: Response) => {
-    //add doctor id
     let date = req.params.date;
     try {
         const windows = await prisma.window.findMany({
@@ -46,6 +38,7 @@ const getWindowsBydate = async (req: Request, res: Response) => {
                 startingTime: {
                     contains: date,
                 },
+                doctorId: Number(req.params.doctor),
             },
         });
         res.json(windows);
@@ -57,52 +50,79 @@ const getWindowsBydate = async (req: Request, res: Response) => {
 };
 
 const createSchedule = async (req: Request, res: Response) => {
+    // const windows= req.body
     console.log("window");
-    const window = [
-        {
-            doctorId: 1,
-            duration: 24,
-            pause: 6,
-            startingTime: "2025-01-16T16:16:00.000Z",
-            endingTime: "2025-01-16T17:16:22.326Z",
-        },
-        {
-            doctorId: 1,
-            duration: 24,
-            pause: 6,
-            startingTime: "2025-01-17T16:16:00.000Z",
-            endingTime: "2025-01-17T17:16:22.326Z",
-        },
-        {
-            doctorId: 1,
-            duration: 24,
-            pause: 6,
-            startingTime: "2025-01-18T16:16:00.000Z",
-            endingTime: "2025-01-18T17:16:22.326Z",
-        },
-        {
-            doctorId: 1,
-            duration: 24,
-            pause: 6,
-            startingTime: "2025-01-19T16:16:00.000Z",
-            endingTime: "2025-01-19T17:16:22.326Z",
-        },
-    ];
+    try {
+        const windows = [
+            {
+                doctorId: 1,
+                duration: 15,
+                pause: 5,
+                startingTime: "2025-01-20T08:00:00.000Z",
+                endingTime: "2025-01-20T08:40:00.000Z",
+            },
+        ];
 
-    const windowsDB = await prisma.$transaction(
-        window.map((w) => prisma.window.create({ data: w }))
-    );
+        const windowsDB = await prisma.$transaction(
+            windows.map((window: Window) =>
+                prisma.window.create({ data: window })
+            )
+        );
 
-    const scheduleSlots = [];
-    for (let i = 0; i < windowsDB.length; i++) {
-        const element = windowsDB[i];
-        scheduleSlots.push(addSlots(element));
+        const schedule = await prisma.scheduledwindow.createMany({
+            data: windows,
+        });
+        const scheduleSlots = [];
+        for (let i = 0; i < windowsDB.length; i++) {
+            const element = windowsDB[i];
+            scheduleSlots.push(addSlots(element));
+        }
+        const flat = scheduleSlots.flat();
+        await prisma.slot.createMany({ data: flat });
+        res.send(flat);
+    } catch (error) {
+        console.log(error);
+        
+        res.send(error);
     }
-    const flat = scheduleSlots.flat();
-    await prisma.slot.createMany({ data: flat });
-    res.send(flat);
 };
 
-// addOneWeek
+const addOneWeek = async (req: Request, res: Response) => {
+    try {
+        const schedule = await prisma.scheduledwindow.findMany({
+            where: { doctorId: Number(req.params.doctorId) },
+        });
+        const updatedSchedule = schedule.map((window: Window) => {
+            delete window.id
+            const start = new Date(window.startingTime);
+            const end = new Date(window.endingTime);
+            // increment the date
+            start.setDate(start.getDate() + 7);
+            end.setDate(end.getDate() + 7);
+            // reassign the new date
+            window.startingTime = start.toISOString();
+            window.endingTime = end.toISOString();
+            return window;
+        });
+        await prisma.scheduledwindow.deleteMany({
+            where: {
+                doctorId: Number(req.params.doctorId)
+            }
+        })
+        await prisma.window.createMany({
+            data: updatedSchedule
+        })
+        await prisma.scheduledwindow.createMany({
+            data: updatedSchedule
+        })
+        const newWindows = prisma.window.createMany({
+            data: updatedSchedule
+        }) 
+        res.send(updatedSchedule);
+      }
+         catch (error) {
+        res.send(error);
+    }
+};
 
-export { addWindow, getWindowsBydate, createSchedule };
+export { addWindow, getWindowsBydate, createSchedule, addOneWeek };
