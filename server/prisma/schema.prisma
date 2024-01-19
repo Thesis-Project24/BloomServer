@@ -117,7 +117,7 @@ model Article {
   title        String
   authorId     Int
   author       Doctor       @relation(fields: [authorId], references: [id])
-  saved        SaveArticle[]
+  saved        SaveArticle[] 
   createdAt    String
 }
 
@@ -137,12 +137,13 @@ model Group {
 }
 
 model SaveArticle {
-  id        Int     @id @default(autoincrement())
-  articleId Int
-  userId    Int
-  article   Article @relation(fields: [articleId], references: [id])
-  user      User    @relation(fields: [userId], references: [id])
+ id       Int    @id @default(autoincrement())
+ articleId Int
+ userId   Int
+ article  Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+ user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
 
 model MedSchedule {
   id         Int        @id @default(autoincrement())
