@@ -8,19 +8,22 @@ const prisma = new PrismaClient();
 const addWindow = async (req: Request, res: Response) => {
     try {
         //create windows
-
+        const windows = req.body
         // should be implemented the same way as createSchedule
-        await prisma.window.createMany({
-            data: req.body,
-        });
+        // await prisma.window.createMany({
+        //     data: req.body,
+        // });
+        const windowsDb = await prisma.$transaction(
+            windows.map((window: Window) => prisma.window.create({ data: window }))
+        );
         //get windows of a specific doctor
-        const windows = await prisma.window.findMany({
-            where: {
-                doctorId: Number(req.params.doctorId),
-            },
-        });
+        // const windows = await prisma.window.findMany({
+        //     where: {
+        //         doctorId: Number(req.params.doctorId),
+        //     },
+        // });
         //create slots for every window
-        const slots = windows.map((window) => {
+        const slots = windowsDb.map((window) => {
             return addSlots(window);
         });
         //insert created slots in database

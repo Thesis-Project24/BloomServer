@@ -64,6 +64,7 @@ const deleteAccount=async(req:Request,res:Response)=>{
 
 ///////////////////////////////update user info///////////////////////////////////////
 const updateInfo = async(req:Request,res:Response)=>{
+    console.log("hiii");
 try {
    const response= await prisma.user.update({
         where:{
