@@ -141,7 +141,7 @@ CREATE TABLE "MedSchedule" (
     "medId" INTEGER NOT NULL,
     "userId" INTEGER NOT NULL,
     "quantity" INTEGER NOT NULL,
-    "schedule" TIMESTAMP(3)[],
+    "schedule" TEXT[],
 
     CONSTRAINT "MedSchedule_pkey" PRIMARY KEY ("id")
 );
