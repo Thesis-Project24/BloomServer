@@ -3,15 +3,15 @@ import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
 
-
 /////////////////////////////////////create article/////////////////////////////////
 export const createArticle = async (req: Request, res: Response) => {
-
   const currentDate = new Date();
-  const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
-  const { content, authorId,title}  = req.body;
+  const formattedDate = `${currentDate.getFullYear()}-${String(
+    currentDate.getMonth() + 1
+  ).padStart(2, "0")}-${String(currentDate.getDate()).padStart(2, "0")}`;
+  const { content, authorId, title } = req.body;
   console.log(req.body);
-  
+
   try {
     const article = await prisma.article.create({
       data: {
@@ -27,21 +27,20 @@ export const createArticle = async (req: Request, res: Response) => {
   }
 };
 
-
 /////////////////////////////////get all articles/////////////////////////////////////
 export const getAllArticles = async (req: Request, res: Response) => {
   try {
     const article = await prisma.article.findMany({
-        include : {
-            author: {
-                select: {
-                  first_name: true,
-                  last_name: true,
-                  specialty:true,
-                  profile_picture:true,
-                }
-              }       
-        }
+      include: {
+        author: {
+          select: {
+            first_name: true,
+            last_name: true,
+            specialty: true,
+            profile_picture: true,
+          },
+        },
+      },
     });
 
     return res.status(200).json({ article });
@@ -52,52 +51,53 @@ export const getAllArticles = async (req: Request, res: Response) => {
 };
 
 ///////////////////////////////////get one article//////////////////////////////////////
-export const getArticleById = async (req:Request, res:Response) => {
+export const getArticleById = async (req: Request, res: Response) => {
   const { id } = req.body;
   try {
-   const article = await prisma.article.findUnique({
-     where: {
-       id: Number(id),
-     },
-     include: {
-       author: {
-         select: {
-           first_name: true,
-           last_name: true,
-           specialty: true,
-           profile_picture: true,
-         },
-       },
-     },
-   });
-   if (!article) {
-     return res.status(404).json({ error: "Article not found" });
-   }
-   return res.status(200).json({ article });
+    const article = await prisma.article.findUnique({
+      where: {
+        id: Number(id),
+      },
+      include: {
+        author: {
+          select: {
+            first_name: true,
+            last_name: true,
+            specialty: true,
+            profile_picture: true,
+          },
+        },
+      },
+    });
+    if (!article) {
+      return res.status(404).json({ error: "Article not found" });
+    }
+    return res.status(200).json({ article });
   } catch (error) {
-   console.error(error);
-   return res.status(500).json({ error: "Internal Server Error :(" });
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error :(" });
   }
- };
- 
+};
+
 ///////////////////////////////delete an article/////////////////////////////////:
-export const deleteArticle = async (req:Request, res:Response)=> {
+export const deleteArticle = async (req: Request, res: Response) => {
   try {
-    await prisma.article.delete({where:{id:Number(req.params.id)}})
-    res.send("deleted")
+    await prisma.article.delete({ where: { id: Number(req.params.id) } });
+    res.send("deleted");
+  } catch (error) {
+    res.send(error);
   }
-  catch(error){
-    res.send(error)
-  }
-}
+};
 ///////////////////////// add article to saved list of one user//////////////////////////
 export const saveArticle = async (req: Request, res: Response) => {
   const { userId, articleId } = req.body;
 
   try {
-    const existing = await prisma.saveArticle.findMany({where:{userId,articleId}})
-    if(existing) {
-      res.send("article already saved")
+    const existing = await prisma.saveArticle.findMany({
+      where: { userId, articleId },
+    });
+    if (existing) {
+      res.send("article already saved");
     }
     const saveArticle = await prisma.saveArticle.create({
       data: {
@@ -121,7 +121,21 @@ export const getSavedArticle = async (req: Request, res: Response) => {
         userId: userId,
       },
       include: {
-        article: true,
+        article: {
+          select: {
+            content: true,
+            title: true,
+            createdAt:true,
+            author: {
+              select: {
+                first_name: true,
+                last_name: true,
+                specialty: true,
+                profile_picture: true,
+              },
+            },
+          },
+        },
       },
     });
     res.status(200).json(savedArticle);
@@ -131,15 +145,12 @@ export const getSavedArticle = async (req: Request, res: Response) => {
   }
 };
 
-
 ///////////////////////////////////search articles///////////////////////////////////
 export const searchArticles = async (req: Request, res: Response) => {
-  const { keyword } = req.body;
+  const { keyword } = req.query;
   try {
     if (!keyword || typeof keyword !== "string") {
-      return res
-        .status(400)
-        .json({ error: "Invalid or missing keyword parameter" });
+      return await getAllArticles(req,res)
     }
     const articles = await prisma.article.findMany({
       where: {
@@ -152,6 +163,21 @@ export const searchArticles = async (req: Request, res: Response) => {
           mode: "insensitive",
         },
       },
+      include: {
+       
+      
+
+            author: {
+              select: {
+                first_name: true,
+                last_name: true,
+                specialty: true,
+                profile_picture: true,
+              },
+            },
+          },
+
+      
     });
 
     res.status(200).json({ articles });
