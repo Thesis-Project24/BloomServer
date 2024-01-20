@@ -141,7 +141,7 @@ CREATE TABLE "MedSchedule" (
     "medId" INTEGER NOT NULL,
     "userId" INTEGER NOT NULL,
     "quantity" INTEGER NOT NULL,
-    "schedule" TIMESTAMP(3)[],
+    "schedule" TEXT[],
 
     CONSTRAINT "MedSchedule_pkey" PRIMARY KEY ("id")
 );
@@ -174,6 +174,18 @@ CREATE TABLE "window" (
     "pause" INTEGER NOT NULL,
 
     CONSTRAINT "window_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Scheduledwindow" (
+    "id" SERIAL NOT NULL,
+    "doctorId" INTEGER NOT NULL,
+    "startingTime" TEXT NOT NULL,
+    "endingTime" TEXT NOT NULL,
+    "duration" INTEGER NOT NULL,
+    "pause" INTEGER NOT NULL,
+
+    CONSTRAINT "Scheduledwindow_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -286,6 +298,9 @@ ALTER TABLE "TrackHabit" ADD CONSTRAINT "TrackHabit_userId_fkey" FOREIGN KEY ("u
 
 -- AddForeignKey
 ALTER TABLE "window" ADD CONSTRAINT "window_doctorId_fkey" FOREIGN KEY ("doctorId") REFERENCES "Doctor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Scheduledwindow" ADD CONSTRAINT "Scheduledwindow_doctorId_fkey" FOREIGN KEY ("doctorId") REFERENCES "Doctor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_waitlist" ADD CONSTRAINT "_waitlist_A_fkey" FOREIGN KEY ("A") REFERENCES "Slot"("id") ON DELETE CASCADE ON UPDATE CASCADE;
