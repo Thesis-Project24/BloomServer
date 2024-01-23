@@ -38,8 +38,8 @@ model Doctor {
   phone_number    String?
   address         String[]      @default([])
   bio             String?
-  rate            Int?
-  review          Int?
+  rate            Int?          @default(0)
+  review          Int?          @default(0)
   gender          String?
   appointment     Appointment[]
   articles         Article[]

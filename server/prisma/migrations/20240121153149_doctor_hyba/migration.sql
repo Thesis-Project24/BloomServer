@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Doctor" ALTER COLUMN "rate" SET DEFAULT 0,
+ALTER COLUMN "review" SET DEFAULT 0;
