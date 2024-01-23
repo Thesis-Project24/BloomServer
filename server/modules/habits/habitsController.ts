@@ -83,7 +83,7 @@ export const getAllHabits = async (req: Request, res: Response) => {
 
 export const getAllHabitsFromUser = async (req: Request, res: Response) => {
   try {
-    const userId = Number(req.params.id);
+    const userId = req.params.id;
     const user = await prisma.user.findUnique({
       where: {
         id: userId,
@@ -182,7 +182,7 @@ export const deleteHabit = async (req: Request, res: Response) => {
 // {Multi Habits Assignement} //
 export const assignMultipleHabits = async (req: Request, res: Response) => {
   try {
-    const { userId, habitIds }: { userId: number; habitIds: number[] } = req.body;
+    const { userId, habitIds }: { userId: string; habitIds: number[] } = req.body;
     const user = await prisma.user.findUnique({
       where: {
         id: userId,

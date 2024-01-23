@@ -27,7 +27,7 @@ const getCommentsByTaggedUser = async (req: Request, res: Response) => {
     try {
         const comments = await prisma.comment.findMany({
             where: { id: Number(req.params.postId),
-            tagId: Number(req.params.tagId)},
+            tagId: req.params.tagId},
         });
         res.send(comments);
     } catch (error) {
