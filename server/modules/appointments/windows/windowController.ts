@@ -38,7 +38,7 @@ const getWindowsBydate = async (req: Request, res: Response) => {
                 startingTime: {
                     contains: date,
                 },
-                doctorId: Number(req.params.doctor),
+                doctorId: req.params.doctor,
             },
         });
         res.json(windows);
@@ -50,19 +50,9 @@ const getWindowsBydate = async (req: Request, res: Response) => {
 };
 
 const createSchedule = async (req: Request, res: Response) => {
-    // const windows= req.body
-    console.log("window");
+    const windows= req.body
+    
     try {
-        const windows = [
-            {
-                doctorId: 1,
-                duration: 15,
-                pause: 5,
-                startingTime: "2025-01-20T08:00:00.000Z",
-                endingTime: "2025-01-20T08:40:00.000Z",
-            },
-        ];
-
         const windowsDB = await prisma.$transaction(
             windows.map((window: Window) =>
                 prisma.window.create({ data: window })
@@ -90,7 +80,7 @@ const createSchedule = async (req: Request, res: Response) => {
 const addOneWeek = async (req: Request, res: Response) => {
     try {
         const schedule = await prisma.scheduledwindow.findMany({
-            where: { doctorId: Number(req.params.doctorId) },
+            where: { doctorId: req.params.doctorId },
         });
         const updatedSchedule = schedule.map((window: Window) => {
             delete window.id
@@ -106,7 +96,7 @@ const addOneWeek = async (req: Request, res: Response) => {
         });
         await prisma.scheduledwindow.deleteMany({
             where: {
-                doctorId: Number(req.params.doctorId)
+                doctorId: req.params.doctorId
             }
         })
         await prisma.window.createMany({

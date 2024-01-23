@@ -10,7 +10,8 @@ const getAllF = async (req: Request, res: Response) => {
             include: {
                 author: {
                     select: {
-                        fullName: true,
+                        first_name: true,
+                        last_name:true,
                         profile_picture: true,
                     },
                 },
@@ -32,7 +33,8 @@ const getOneF = async (req: Request, res: Response) => {
             include: {
                 author: {
                     select: {
-                        fullName: true,
+                        first_name: true,
+                        last_name: true,
                         profile_picture: true,
                     },
                 },

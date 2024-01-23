@@ -8,7 +8,7 @@ export const getAllPosts = async (req: Request, res: Response) => {
     
     try {
         const allPosts = await prisma.journal.findMany({
-            where: { authorId: Number(authorId) }
+            where: { authorId: authorId }
         })
         res.status(200).json(allPosts);
     } catch (err) {
@@ -24,7 +24,7 @@ const {authorId} = req.params;
 try {
     const getOne=await prisma.journal.findUnique({
         where:{id: Number(id),
-            authorId: Number(authorId)
+            authorId: authorId
         }
     })
     res.status(200).json(getOne);
@@ -38,7 +38,7 @@ export const removePost=async(req:Request, res: Response) => {
     const { authorId } = req.params;
     try {
         const query = await prisma.journal.delete({where:{id:parseInt(req.params.id),
-        authorId:Number(authorId)}})
+        authorId:authorId}})
     res.send(query);
     } catch (error) {
         res.send(error)
@@ -53,7 +53,7 @@ try {
         data:{
             content,
             title,
-            authorId:Number(authorId)
+            authorId:authorId
 
         }
     })
@@ -72,7 +72,7 @@ export const updatePost = async (req: Request, res: Response) => {
         const change = await prisma.journal.update({
             where: {
                 id: Number(id),
-                authorId:Number(authorId)
+                authorId:authorId
             },
             data: { content, title },
         });
