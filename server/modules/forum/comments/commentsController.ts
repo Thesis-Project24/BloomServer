@@ -3,30 +3,18 @@ import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
 
-// const addComment = async (req:Request, res:Response) => {
-//     console.log('Request to add comment:', req.body);
-//     try {
-//       const comment = await prisma.comment.create({ data: req.body });
-//       res.send(comment);
-//     } catch (error:any) {
-//       console.error('Error creating comment:', error);
-//       res.status(500).send(error.message);
-//     }
-//   };
 
 const addComment = async (req: Request, res: Response) => {
-    console.log('Request to add comment:', req.body);
-    const { content, postId, userId, tagId } = req.body; // Added tagId
-    try {
+    try{console.log('Request to add comment:', req.body);
+    const { content, postId, userId, tagId } = req.body; 
         const comment = await prisma.comment.create({
-            data: { content, postId, userId, tagId }, // Include tagId in the data
+            data: { content, postId, userId, tagId }, 
         });
-        res.send(comment);
-    } catch (error: any) {
+        res.send(comment);}
+     catch (error: any) {
         console.error('Error creating comment:', error);
-        res.status(500).send(error.message);
-    }
-};
+        res.status(500).send(error.message);}}
+
 
 const getCommentsByPost = async (req: Request, res: Response) => {
     try {
@@ -35,7 +23,7 @@ const getCommentsByPost = async (req: Request, res: Response) => {
             include: {
                 User: {
                     select: {
-                        fullName: true,
+                        first_name: true,
                         profile_picture: true,
                         comments:true
                     },
@@ -52,7 +40,8 @@ const getCommentsByTaggedUser = async (req: Request, res: Response) => {
     try {
         const comments = await prisma.comment.findMany({
             where: { id: Number(req.params.postId),
-            tagId: Number(req.params.tagId)},
+            
+            tagId: req.params.tagId},
         });
         res.send(comments);
     } catch (error) {
@@ -71,20 +60,9 @@ const deleteComment = async (req:Request, res:Response) => {
         res.send(error);
     }
 }
-const editComment = async (req:Request, res:Response) => {
-    try {
-        const comment = await prisma.comment.update({
-            where: { id: Number(req.params.id) },
-            data: req.body
-        });
-        res.send(comment);
-    }
-    catch(error){
-        res.send(error);
-    }
-  }
+
   
-  const editTagcomment=async (req:Request, res:Response) => {
+  const editTagcomment = async (req:Request, res:Response) => {
     const {userId}=req.body
 try {
     const comment = await prisma.comment.update({
@@ -99,4 +77,18 @@ try {
   }
 
 
-export { addComment, getCommentsByPost,getCommentsByTaggedUser,deleteComment,editComment,editTagcomment };
+
+const editComment = async (req:Request, res:Response) =>  {
+    try {
+        const comment = prisma.comment.update({
+            where:{id:Number(req.params.id)},
+            data:req.body
+        })
+        res.send(comment)
+    }
+    catch(error){
+        res.send(error)
+    }
+}
+
+export { addComment, getCommentsByPost,getCommentsByTaggedUser,deleteComment,editComment, editTagcomment}

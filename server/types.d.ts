@@ -1,5 +1,5 @@
 interface User {
-  id: number;
+  id: string;
   email: string;
   username: string;
 <<<<<<< HEAD
@@ -14,7 +14,7 @@ interface User {
 }
 
 interface Doctor {
-  id?: number;
+  id: string;
   email: string;
   first_name: string;
   last_name: string;
@@ -37,8 +37,8 @@ interface Journal {
 
 interface Appointmenent {
   id?: number;
-  patientId: number;
-  doctorId: number;
+  patientId: string;
+  doctorId: string;
   appDetails?: string;
   appStatus?: string;
   appReview?: number;
@@ -58,7 +58,7 @@ interface ForumPost {
   content: string;
   upvote: number;
   downvote: number;
-  authorId: number;
+  authorId: string;
 }
 
 interface Comment {
@@ -67,15 +67,15 @@ interface Comment {
   upvote: number;
   downvote: number;
   postId: number;
-  userId: number;
-  tagId: number;
+  userId: string;
+  tagId: string;
 }
 
 interface Article {
   id: number;
   title: string;
   content: string;
-  authorId: number;
+  authorId: string;
   picture_url: string;
   createdAt?: string;  
  
@@ -89,19 +89,19 @@ interface Flair {
 interface Group {
   id: number;
   name: string;
-  doctorId: number;
+  doctorId: string;
 }
 
 interface SaveArticle {
   id: number;
   articleId: number;
-  userId: number;
+  userId: string;
 }
 
 interface MedSchedule {
   id: number;
   medId: number;
-  userId: number;
+  userId: string;
   quantity: number;
   schedule: DateTime[];
 }
@@ -115,13 +115,13 @@ interface TrackHabit {
   id: number;
 
   habitId: number;
-  userId: number;
+  userId: string;
   tracker: number[];
 }
 
 interface Window {
-  id: number;
-  doctorId: number;
+  id?: number;
+  doctorId: string;
   startingTime: string;
   endingTime: string;
   duration: number;

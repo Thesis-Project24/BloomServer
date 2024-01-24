@@ -7,7 +7,7 @@ const prisma=new PrismaClient();
 ////////////////////////add user to the database////////////////////////////////////
 const signUp = async (req:Request,res:Response)=>{
 try {
-    const {email,username,phone_number,fullName}:User = req.body
+    const {id,email,username,first_name,last_name}:User = req.body
     const user = await prisma.user.findUnique({
         where:{email}
     })
@@ -19,12 +19,7 @@ try {
         
     }
     const users =await prisma.user.create({
-        data:{
-           email,
-           username,
-           fullName ,
-        }
-        
+        data:req.body
     })
     return res.status(201).send(users)
 } catch (error) {
@@ -38,15 +33,27 @@ try {
 //////////////////////////////check if user is in database when they log in////////////////
 const signIn = async (req: Request, res: Response) => {
     try {
-        const user = await prisma.user.findUnique({
-            where: { email: req.body.email }
-        });
-
-        if (!user) {
-            res.status(409).send("User does not exist");
-        } else {
-            res.status(200).send(user);
+        if(req.params.role === "user"){
+            const user = await prisma.user.findUnique({
+                where: { email: req.body.email }
+            });
+            if (!user) {
+                res.status(409).send("User does not exist");
+            } else {
+                res.status(200).send(user);
+            }
         }
+        if(req.params.role ==="doctor"){
+            const user = await prisma.doctor.findUnique({
+                where: { email: req.body.email }
+            });
+            if (!user) {
+                res.status(409).send("User does not exist");
+            } else {
+                res.status(200).send(user);
+            }
+        }
+        
     } catch (error) {
         res.send(error);
     }
@@ -56,7 +63,7 @@ const signIn = async (req: Request, res: Response) => {
 ////////////////////////////////////delete user//////////////////////////////////////
 const deleteAccount=async(req:Request,res:Response)=>{
     try {
-        const id=Number(req.params.id)
+        const id=req.params.id
         const user =await prisma.user.delete({
             where:{id:id}
         })
@@ -69,10 +76,11 @@ const deleteAccount=async(req:Request,res:Response)=>{
 
 ///////////////////////////////update user info///////////////////////////////////////
 const updateInfo = async(req:Request,res:Response)=>{
+    console.log(req.params.userId)
 try {
    const response= await prisma.user.update({
         where:{
-            id:Number(req.params.userId)
+            id:req.params.userId
         },
         data:{
             age:{
@@ -84,8 +92,11 @@ try {
             profile_picture:{
                 set:req.body.profile_picture
             },
-            fullName:{
-                set:req.body.fullName
+            first_name:{
+                set:req.body.first_name
+            },
+            last_name:{
+                set:req.body.last_name
             }
         }
     })
@@ -102,7 +113,7 @@ const getOne = async (req: Request, res: Response) => {
   try {
     const user = await prisma.user.findUnique({
       where: {
-        id: Number(req.params.userId),
+        id: req.params.userId,
       },
     });
     return res.json(user);
@@ -111,6 +122,8 @@ const getOne = async (req: Request, res: Response) => {
     res.status(500).send(error);
   }
 };
+
+
 const getallusers = async (req:Request, res:Response) => {
     try {
        
@@ -128,7 +141,7 @@ const getOneUserByUserName= async (req:Request, res:Response) => {
                 username: req.params.username,
             },
             select: {
-                id: true, // Only return the user ID
+                id: true, 
             },
         });
 

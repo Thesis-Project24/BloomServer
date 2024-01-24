@@ -3,33 +3,14 @@ import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
 
-///////////////////////////get all forums posts/////////////////////////////////////
-// const getAllF = async (req:Request,res:Response)=> {
-// try {
-//     const forumPosts = await prisma.forumPost.findMany({
 
-//         include: {
-//           author: {
-//             select : {
-//               username:true,
-//               profile_picture:true,
-//             }
-//           }
-//         }
-//     })
-//     res.send(forumPosts)
-// }
-// catch (error){
-//     res.send(error)
-// }
-// }
 const getAllF = async (req: Request, res: Response) => {
     try {
         const forumPosts = await prisma.forumPost.findMany({
             include: {
                 author: {
                     select: {
-                        fullName: true,
+                        first_name: true,
                         profile_picture: true,
                     },
                 },
@@ -51,7 +32,7 @@ const getOneF = async (req: Request, res: Response) => {
             include: {
                 author: {
                     select: {
-                        fullName: true,
+                        first_name: true,
                         profile_picture: true,
                     },
                 },
@@ -191,7 +172,7 @@ const searchUsers = async (req:Request, res:Response) => {
             select: {
                 id: true,
                 username: true,
-                fullName: true
+                first_name: true
             }
         });
 

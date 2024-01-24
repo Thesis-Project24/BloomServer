@@ -36,6 +36,7 @@ export const getOneDoc = async (req: Request, res: Response) => {
 ////////////////////////////////add doctor (admin)/////////////////////////////////////
 export const addDoctor = async (req: Request, res: Response) => {
   const {
+    id,
     email,
     first_name,
     last_name,
@@ -46,7 +47,8 @@ export const addDoctor = async (req: Request, res: Response) => {
     bio,
   }: Doctor = req.body;
   try {
-    const docBody: Doctor = {
+    const docBody=  {
+      id,
       email,
       first_name,
       last_name,
@@ -69,7 +71,6 @@ export const addDoctor = async (req: Request, res: Response) => {
 ////////////////////////update doctor info//////////////////////////////////////
 export const upDateDoc = async (req: Request, res: Response) => {
   const {
-    id,
     email,
     first_name,
     last_name,
@@ -81,7 +82,7 @@ export const upDateDoc = async (req: Request, res: Response) => {
   }: Doctor = req.body;
 
   try {
-    const docBody: Doctor = {
+    const docBody = {
       email,
       first_name,
       last_name,
@@ -92,7 +93,7 @@ export const upDateDoc = async (req: Request, res: Response) => {
       bio,
     };
     const doc = await prisma.doctor.update({
-      where: { id },
+      where: { id:req.params.id },
       data: docBody,
     });
 
@@ -109,7 +110,7 @@ export const addReviewDoc = async (req: Request, res: Response) => {
   try {
     const Appoint = await prisma.appointment.findMany({
       where: {
-        doctorId: Number(req.params.docotrId),
+        doctorId: req.params.docotrId,
         appReview: {
           gte: 0,
         },
@@ -120,7 +121,7 @@ export const addReviewDoc = async (req: Request, res: Response) => {
     }, 0);
     const doctor = prisma.doctor.update({
       where: {
-        id: Number(req.params.docotrId),
+        id: req.params.docotrId,
       },
       data: {
         review: {
