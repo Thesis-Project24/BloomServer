@@ -4,10 +4,10 @@ import { Request, Response } from "express";
 const prisma=new PrismaClient();
 
 
-
+////////////////////////add user to the database////////////////////////////////////
 const signUp = async (req:Request,res:Response)=>{
 try {
-    const {email,username,fullName}:User = req.body
+    const {email,username,phone_number,fullName}:User = req.body
     const user = await prisma.user.findUnique({
         where:{email}
     })
@@ -34,6 +34,8 @@ try {
     
 }
 }
+
+//////////////////////////////check if user is in database when they log in////////////////
 const signIn = async (req: Request, res: Response) => {
     try {
         const user = await prisma.user.findUnique({
@@ -50,6 +52,8 @@ const signIn = async (req: Request, res: Response) => {
     }
 };
 
+
+////////////////////////////////////delete user//////////////////////////////////////
 const deleteAccount=async(req:Request,res:Response)=>{
     try {
         const id=Number(req.params.id)
@@ -62,6 +66,8 @@ const deleteAccount=async(req:Request,res:Response)=>{
     }
 }
 
+
+///////////////////////////////update user info///////////////////////////////////////
 const updateInfo = async(req:Request,res:Response)=>{
 try {
    const response= await prisma.user.update({
@@ -91,20 +97,51 @@ catch(error) {
 }
 
 
+///////////////////////////////////////////get one user by id//////////////////////////////
 const getOne = async (req: Request, res: Response) => {
-
   try {
     const user = await prisma.user.findUnique({
       where: {
         id: Number(req.params.userId),
       },
     });
-    console.log(user, "backkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
     return res.json(user);
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
   }
 };
+const getallusers = async (req:Request, res:Response) => {
+    try {
+       
+        const users = await prisma.user.findMany();
+        return res.json(users);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+}
+const getOneUserByUserName= async (req:Request, res:Response) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                username: req.params.username,
+            },
+            select: {
+                id: true, // Only return the user ID
+            },
+        });
 
-export { signUp, signIn, deleteAccount, updateInfo, getOne };
+        if (user) {
+            res.json(user.id);
+        } else {
+            res.status(404).send('User not found');
+        }
+    } catch (error:any) {
+        console.error('Error fetching user ID:', error);
+        res.status(500).send(error.message);
+    }
+}
+
+
+export { signUp, signIn, deleteAccount, updateInfo, getOne,getallusers,getOneUserByUserName };

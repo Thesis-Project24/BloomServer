@@ -2,7 +2,11 @@ interface User {
   id: number;
   email: string;
   username: string;
+<<<<<<< HEAD
   fullName:string;
+=======
+  fullName: string
+>>>>>>> dd2f8cfa4a8fb2161bac5dd85ac0c725b11adbf4
   profile_picture: string;
   phone_number: string;
   age: number;
@@ -99,7 +103,7 @@ interface MedSchedule {
   medId: number;
   userId: number;
   quantity: number;
-  schedule: DateTime;
+  schedule: DateTime[];
 }
 
 interface Habit {

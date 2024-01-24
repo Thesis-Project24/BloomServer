@@ -1,13 +1,14 @@
 import express from 'express'
-import { addF, addFlairToPost, addForum, downvotePost, getAllF, upvotePost } from './postsController';
-import { addPost } from '../../journal/journalController';
+import { addF, addFlairToPost, downvotePost, getAllF, upvotePost,deletePost, getOneF, searchUsers } from './postsController';
+
 const router = express.Router();
 
 router.get("/",getAllF)
+router.get('/searchUsers', searchUsers);
+router.get("/:id",getOneF)
 router.post("/:flair",addF)
 router.put("/upvote",upvotePost)
 router.put("/downvote",downvotePost)
 router.put("/:postId/:flairId",addFlairToPost)
-router.post("/createpost",addForum)
-
+router.delete("/:id",deletePost)
 export default router;

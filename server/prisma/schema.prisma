@@ -93,7 +93,7 @@ model ForumPost {
   upvote   Int?    @default(0)
   downvote Int?     @default(0)
   authorId Int
-  comments Comment[]
+  comments Comment[] 
   author   User      @relation(fields: [authorId], references: [id])
   flairs   Flair[]   @relation("FlairToForumPost")
 }
@@ -106,7 +106,7 @@ model Comment {
   postId     Int
   userId     Int
   tagId      Int?
-  post       ForumPost @relation(fields: [postId], references: [id])
+  post       ForumPost? @relation(fields: [postId], references: [id], onDelete: Cascade)
   taggedUser User?     @relation("tag", fields: [tagId], references: [id])
   User       User      @relation("author", fields: [userId], references: [id])
 }
@@ -117,7 +117,7 @@ model Article {
   title        String
   authorId     Int
   author       Doctor       @relation(fields: [authorId], references: [id])
-  saved        SaveArticle[]
+  saved        SaveArticle[] 
   createdAt    String
 }
 
@@ -137,19 +137,20 @@ model Group {
 }
 
 model SaveArticle {
-  id        Int     @id @default(autoincrement())
-  articleId Int
-  userId    Int
-  article   Article @relation(fields: [articleId], references: [id])
-  user      User    @relation(fields: [userId], references: [id])
+ id       Int    @id @default(autoincrement())
+ articleId Int
+ userId   Int
+ article  Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+ user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
 
 model MedSchedule {
   id         Int        @id @default(autoincrement())
   medId      Int
   userId     Int
   quantity   Int
-  schedule   DateTime[]
+  schedule   String[]
   medication Meds       @relation(fields: [medId], references: [id])
   user       User       @relation(fields: [userId], references: [id])
 }

@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
 
+/////////////////////////////get all doctors/////////////////////////////////////
 export const getDoctors = async (req: Request, res: Response) => {
   try {
     const doc = await prisma.doctor.findMany();
@@ -14,16 +15,16 @@ export const getDoctors = async (req: Request, res: Response) => {
   }
 };
 
+
+////////////////////get one doctor by id///////////////////////////////////////
 export const getOneDoc = async (req: Request, res: Response) => {
   const productId = JSON.parse(req.params.id);
-  console.log(productId)
   try {
     const doc = await prisma.doctor.findUnique({
       where: {
         id: productId,
       },
     });
-    console.log(doc,"eeefwewwrfkhfwhfwhfwleflwflewf");
     return res.json(doc);
   } catch (error) {
     console.log(error);
@@ -31,6 +32,8 @@ export const getOneDoc = async (req: Request, res: Response) => {
   }
 };
 
+
+////////////////////////////////add doctor (admin)/////////////////////////////////////
 export const addDoctor = async (req: Request, res: Response) => {
   const {
     email,
@@ -56,7 +59,6 @@ export const addDoctor = async (req: Request, res: Response) => {
     const doc = await prisma.doctor.create({
       data: docBody,
     });
-
     return res.json(doc);
   } catch (error) {
     console.log(error);
@@ -64,6 +66,7 @@ export const addDoctor = async (req: Request, res: Response) => {
   }
 };
 
+////////////////////////update doctor info//////////////////////////////////////
 export const upDateDoc = async (req: Request, res: Response) => {
   const {
     id,
@@ -100,6 +103,8 @@ export const upDateDoc = async (req: Request, res: Response) => {
   }
 };
 
+
+/////////////////////////////review doctor by appointements review//////////////////////:
 export const addReviewDoc = async (req: Request, res: Response) => {
   try {
     const Appoint = await prisma.appointment.findMany({
@@ -127,7 +132,8 @@ export const addReviewDoc = async (req: Request, res: Response) => {
   } catch (error) {}
 };
 
-export const getDocSpecialist = async (req: Request, res: Response) => {
+//////////////////////////////get doctors by specialties////////////////////////:
+export const getDocSpecialists = async (req: Request, res: Response) => {
   const { specialty } = req.params;
   try {
     const doc = await prisma.doctor.findMany({
@@ -142,6 +148,8 @@ export const getDocSpecialist = async (req: Request, res: Response) => {
   }
 };
 
+
+////////////////////////////////Get doctors by gender///////////////////////////////////
 export const getDocGender = async (req: Request, res: Response) => {
   const { gender } = req.params;
   try {

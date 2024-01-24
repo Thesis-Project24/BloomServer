@@ -141,7 +141,7 @@ CREATE TABLE "MedSchedule" (
     "medId" INTEGER NOT NULL,
     "userId" INTEGER NOT NULL,
     "quantity" INTEGER NOT NULL,
-    "schedule" TIMESTAMP(3)[],
+    "schedule" TEXT[],
 
     CONSTRAINT "MedSchedule_pkey" PRIMARY KEY ("id")
 );
@@ -252,7 +252,7 @@ ALTER TABLE "Slot" ADD CONSTRAINT "Slot_windowId_fkey" FOREIGN KEY ("windowId") 
 ALTER TABLE "ForumPost" ADD CONSTRAINT "ForumPost_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Comment" ADD CONSTRAINT "Comment_postId_fkey" FOREIGN KEY ("postId") REFERENCES "ForumPost"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Comment" ADD CONSTRAINT "Comment_postId_fkey" FOREIGN KEY ("postId") REFERENCES "ForumPost"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Comment" ADD CONSTRAINT "Comment_tagId_fkey" FOREIGN KEY ("tagId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -267,10 +267,10 @@ ALTER TABLE "Article" ADD CONSTRAINT "Article_authorId_fkey" FOREIGN KEY ("autho
 ALTER TABLE "Group" ADD CONSTRAINT "Group_doctorId_fkey" FOREIGN KEY ("doctorId") REFERENCES "Doctor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SaveArticle" ADD CONSTRAINT "SaveArticle_articleId_fkey" FOREIGN KEY ("articleId") REFERENCES "Article"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "SaveArticle" ADD CONSTRAINT "SaveArticle_articleId_fkey" FOREIGN KEY ("articleId") REFERENCES "Article"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SaveArticle" ADD CONSTRAINT "SaveArticle_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "SaveArticle" ADD CONSTRAINT "SaveArticle_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "MedSchedule" ADD CONSTRAINT "MedSchedule_medId_fkey" FOREIGN KEY ("medId") REFERENCES "Meds"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

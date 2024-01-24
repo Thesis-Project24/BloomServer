@@ -4,9 +4,9 @@ import { Habit, TrackHabit, User } from "../../types";
 
 const prisma = new PrismaClient();
 
-// {   Habit Creation  } //
 
-export const creatHabit = async (req: Request, res: Response) => {
+///////////////////////////create habit for the whole app/////////////////////////////
+export const createHabit = async (req: Request, res: Response) => {
   try {
     const { name }: Habit = req.body;
     const habit= await prisma.habit.create({
@@ -20,6 +20,7 @@ export const creatHabit = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Internal Server Error :(" });
   }
 };
+
 // {   Habit Assignement  } //
 export const assignHabit = async (req: Request, res: Response) => {
   try {
@@ -77,6 +78,7 @@ export const getAllHabits = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Internal Server Error :(" });
   }
 };
+
 // {get all habits from specefic user} //
 
 export const getAllHabitsFromUser = async (req: Request, res: Response) => {
