@@ -6,29 +6,29 @@ const prisma=new PrismaClient();
 
 ////////////////////////add user to the database////////////////////////////////////
 const signUp = async (req:Request,res:Response)=>{
-try {
-    const {id,email,username,first_name,last_name}:User = req.body
-    const user = await prisma.user.findUnique({
-        where:{email}
-    })
-    if (user!==null) {
+    try {
+        const {email}:User = req.body
         const user = await prisma.user.findUnique({
-            where:{email:req.body.email},
+            where:{email}
         })
-        return res.send(user);
-        
+        if (user!==null) {
+            const user = await prisma.user.findUnique({
+                where:{email:req.body.email},
+            })
+            return res.send(user);
+    
+        }
+        const users =await prisma.user.create({
+            data:req.body
+        })
+        return res.status(201).send(users)
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error)
+    
+    
     }
-    const users =await prisma.user.create({
-        data:req.body
-    })
-    return res.status(201).send(users)
-} catch (error) {
-    console.log(error);
-    res.status(500).send(error)
-    
-    
-}
-}
+    }
 
 //////////////////////////////check if user is in database when they log in////////////////
 const signIn = async (req: Request, res: Response) => {
@@ -64,9 +64,6 @@ const signIn = async (req: Request, res: Response) => {
 const deleteAccount=async(req:Request,res:Response)=>{
     try {
         const id=req.params.id
-        const user =await prisma.user.delete({
-            where:{id:id}
-        })
         res.send("deleted")
     } catch (error) {
         res.send(error)
@@ -123,4 +120,38 @@ const getOne = async (req: Request, res: Response) => {
   }
 };
 
-export { signUp, signIn, deleteAccount, updateInfo, getOne };
+
+const getallusers = async (req:Request, res:Response) => {
+    try {
+       
+        const users = await prisma.user.findMany();
+        return res.json(users);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+}
+const getOneUserByUserName= async (req:Request, res:Response) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                username: req.params.username,
+            },
+            select: {
+                id: true, 
+            },
+        });
+
+        if (user) {
+            res.json(user.id);
+        } else {
+            res.status(404).send('User not found');
+        }
+    } catch (error:any) {
+        console.error('Error fetching user ID:', error);
+        res.status(500).send(error.message);
+    }
+}
+
+
+export { signUp, signIn, deleteAccount, updateInfo, getOne,getallusers,getOneUserByUserName };

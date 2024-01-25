@@ -3,19 +3,32 @@ import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
 
+
 const addComment = async (req: Request, res: Response) => {
-    try {
-        const comment = await prisma.comment.create({ data: req.body });
-        res.send(comment);
-    } catch (error) {
-        res.send(error);
-    }
-};
+    try{console.log('Request to add comment:', req.body);
+    const { content, postId, userId, tagId } = req.body; 
+        const comment = await prisma.comment.create({
+            data: { content, postId, userId, tagId }, 
+        });
+        res.send(comment);}
+     catch (error: any) {
+        console.error('Error creating comment:', error);
+        res.status(500).send(error.message);}}
+
 
 const getCommentsByPost = async (req: Request, res: Response) => {
     try {
         const comments = await prisma.comment.findMany({
-            where: { id: Number(req.params.id) },
+            where: { postId: Number(req.params.id) },
+            include: {
+                User: {
+                    select: {
+                        first_name: true,
+                        profile_picture: true,
+                        comments:true
+                    },
+                },
+            },
         });
         res.send(comments);
     } catch (error) {
@@ -27,6 +40,7 @@ const getCommentsByTaggedUser = async (req: Request, res: Response) => {
     try {
         const comments = await prisma.comment.findMany({
             where: { id: Number(req.params.postId),
+            
             tagId: req.params.tagId},
         });
         res.send(comments);
@@ -34,6 +48,8 @@ const getCommentsByTaggedUser = async (req: Request, res: Response) => {
         res.send(error);
     }
 };
+//get tagged people by comment Id 
+
 
 const deleteComment = async (req:Request, res:Response) => {
     try {
@@ -44,6 +60,24 @@ const deleteComment = async (req:Request, res:Response) => {
         res.send(error);
     }
 }
+
+  
+  const editTagcomment = async (req:Request, res:Response) => {
+    const {userId}=req.body
+try {
+    const comment = await prisma.comment.update({
+        where:{id: Number(req.params.id)},
+        data: { tagId: userId },
+    })
+    res.send(comment)
+} catch (error) {
+    res.send(error)
+}
+
+  }
+
+
+
 const editComment = async (req:Request, res:Response) =>  {
     try {
         const comment = prisma.comment.update({
@@ -57,4 +91,4 @@ const editComment = async (req:Request, res:Response) =>  {
     }
 }
 
-export { addComment, getCommentsByPost,getCommentsByTaggedUser,deleteComment,editComment };
+export { addComment, getCommentsByPost,getCommentsByTaggedUser,deleteComment,editComment, editTagcomment}

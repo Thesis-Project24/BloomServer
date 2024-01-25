@@ -1,12 +1,14 @@
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "username" TEXT NOT NULL,
-    "fullName" TEXT,
+    "first_name" TEXT,
+    "last_name" TEXT,
     "profile_picture" TEXT,
     "phone_number" TEXT,
     "age" INTEGER,
+    "role" TEXT NOT NULL DEFAULT 'user',
     "mood" JSONB[],
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
@@ -14,7 +16,7 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Doctor" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "first_name" TEXT NOT NULL,
     "last_name" TEXT NOT NULL,
@@ -26,6 +28,7 @@ CREATE TABLE "Doctor" (
     "rate" INTEGER,
     "review" INTEGER,
     "gender" TEXT,
+    "role" TEXT NOT NULL DEFAULT 'doctor',
 
     CONSTRAINT "Doctor_pkey" PRIMARY KEY ("id")
 );
@@ -43,7 +46,7 @@ CREATE TABLE "Journal" (
     "id" SERIAL NOT NULL,
     "content" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "authorId" INTEGER NOT NULL,
+    "authorId" TEXT NOT NULL,
 
     CONSTRAINT "Journal_pkey" PRIMARY KEY ("id")
 );
@@ -51,8 +54,8 @@ CREATE TABLE "Journal" (
 -- CreateTable
 CREATE TABLE "Appointment" (
     "id" SERIAL NOT NULL,
-    "patientId" INTEGER NOT NULL,
-    "doctorId" INTEGER NOT NULL,
+    "patientId" TEXT NOT NULL,
+    "doctorId" TEXT NOT NULL,
     "appDetails" TEXT,
     "appStatus" TEXT NOT NULL DEFAULT 'available',
     "appReview" INTEGER NOT NULL DEFAULT 0,
@@ -80,7 +83,7 @@ CREATE TABLE "ForumPost" (
     "image" TEXT,
     "upvote" INTEGER DEFAULT 0,
     "downvote" INTEGER DEFAULT 0,
-    "authorId" INTEGER NOT NULL,
+    "authorId" TEXT NOT NULL,
 
     CONSTRAINT "ForumPost_pkey" PRIMARY KEY ("id")
 );
@@ -92,8 +95,8 @@ CREATE TABLE "Comment" (
     "upvote" INTEGER DEFAULT 0,
     "downvote" INTEGER DEFAULT 0,
     "postId" INTEGER NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "tagId" INTEGER,
+    "userId" TEXT NOT NULL,
+    "tagId" TEXT,
 
     CONSTRAINT "Comment_pkey" PRIMARY KEY ("id")
 );
@@ -103,7 +106,7 @@ CREATE TABLE "Article" (
     "id" SERIAL NOT NULL,
     "content" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "authorId" INTEGER NOT NULL,
+    "authorId" TEXT NOT NULL,
     "createdAt" TEXT NOT NULL,
 
     CONSTRAINT "Article_pkey" PRIMARY KEY ("id")
@@ -121,7 +124,7 @@ CREATE TABLE "Flair" (
 CREATE TABLE "Group" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "doctorId" INTEGER NOT NULL,
+    "doctorId" TEXT NOT NULL,
 
     CONSTRAINT "Group_pkey" PRIMARY KEY ("id")
 );
@@ -130,7 +133,7 @@ CREATE TABLE "Group" (
 CREATE TABLE "SaveArticle" (
     "id" SERIAL NOT NULL,
     "articleId" INTEGER NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "SaveArticle_pkey" PRIMARY KEY ("id")
 );
@@ -139,7 +142,7 @@ CREATE TABLE "SaveArticle" (
 CREATE TABLE "MedSchedule" (
     "id" SERIAL NOT NULL,
     "medId" INTEGER NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
     "quantity" INTEGER NOT NULL,
     "schedule" TEXT[],
 
@@ -158,7 +161,7 @@ CREATE TABLE "Habit" (
 CREATE TABLE "TrackHabit" (
     "id" SERIAL NOT NULL,
     "habitId" INTEGER NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
     "tracker" JSONB[],
 
     CONSTRAINT "TrackHabit_pkey" PRIMARY KEY ("id")
@@ -167,7 +170,7 @@ CREATE TABLE "TrackHabit" (
 -- CreateTable
 CREATE TABLE "window" (
     "id" SERIAL NOT NULL,
-    "doctorId" INTEGER NOT NULL,
+    "doctorId" TEXT NOT NULL,
     "startingTime" TEXT NOT NULL,
     "endingTime" TEXT NOT NULL,
     "duration" INTEGER NOT NULL,
@@ -179,7 +182,7 @@ CREATE TABLE "window" (
 -- CreateTable
 CREATE TABLE "Scheduledwindow" (
     "id" SERIAL NOT NULL,
-    "doctorId" INTEGER NOT NULL,
+    "doctorId" TEXT NOT NULL,
     "startingTime" TEXT NOT NULL,
     "endingTime" TEXT NOT NULL,
     "duration" INTEGER NOT NULL,
@@ -191,7 +194,7 @@ CREATE TABLE "Scheduledwindow" (
 -- CreateTable
 CREATE TABLE "_waitlist" (
     "A" INTEGER NOT NULL,
-    "B" INTEGER NOT NULL
+    "B" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -203,14 +206,20 @@ CREATE TABLE "_FlairToForumPost" (
 -- CreateTable
 CREATE TABLE "_GroupToUser" (
     "A" INTEGER NOT NULL,
-    "B" INTEGER NOT NULL
+    "B" TEXT NOT NULL
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_id_key" ON "User"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Doctor_id_key" ON "Doctor"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Doctor_email_key" ON "Doctor"("email");
