@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
 
-///////////////////////////get all forums posts/////////////////////////////////////
+
 const getAllF = async (req: Request, res: Response) => {
     try {
         const forumPosts = await prisma.forumPost.findMany({
@@ -11,7 +11,6 @@ const getAllF = async (req: Request, res: Response) => {
                 author: {
                     select: {
                         first_name: true,
-                        last_name:true,
                         profile_picture: true,
                     },
                 },
@@ -34,7 +33,6 @@ const getOneF = async (req: Request, res: Response) => {
                 author: {
                     select: {
                         first_name: true,
-                        last_name: true,
                         profile_picture: true,
                     },
                 },
@@ -97,12 +95,19 @@ const addFlairToPost = async (req: Request, res: Response) => {
 //////////////////////////////////:delete post////////////////////////////////////:
 const deletePost = async (req: Request, res: Response) => {
     try {
-        await prisma.forumPost.delete({ where: { id: Number(req.params.id) } });
-        res.send("deleted");
-    } catch (error) {
-        res.send(error);
+        await prisma.forumPost.delete({ 
+            where: { id: Number(req.params.id) },
+            include:{
+                comments:true
+            }
+        });
+        res.send("Post deleted successfully");
+    } catch (error: any) {
+        console.error('Error deleting post:', error);
+        res.status(500).send(error.message);
     }
 };
+
 //////////////////////////////upvote post /////////////////////////////////////
 const upvotePost = async (req: Request, res: Response) => {
     try {
@@ -141,6 +146,47 @@ const downvotePost = async (req: Request, res: Response) => {
     }
 };
 
+        const addForum = async(req:Request,res:Response)=>{
+const {content,authorId,title}=req.body
+try {
+  const post = await prisma.forumPost.create({
+    data: {
+      content,
+      authorId,
+      title
+    }
+  })
+  res.status(200).send(post)
+} catch (error) {
+  console.error(error)
+  res.status(500).json({error: 'error creating forum'})
+}
+}
+const searchUsers = async (req:Request, res:Response) => {
+    
+    const searchQuery = req.query.q === '' ? '' : String(req.query.q);
+    console.log("Search Query:", searchQuery);
 
+    try {
+        const users = await prisma.user.findMany({
+            where: {
+                username: { 
+                    contains: searchQuery, 
+                    mode: 'insensitive' 
+                }
+            },
+            select: {
+                id: true,
+                username: true,
+                first_name: true
+            }
+        });
 
-export { getAllF, addF, addFlairToPost, upvotePost, downvotePost, deletePost,getOneF };
+        res.json(users);
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+export { getAllF, addF,addForum, addFlairToPost, upvotePost, downvotePost, deletePost,getOneF,searchUsers };

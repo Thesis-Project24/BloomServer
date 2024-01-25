@@ -2,8 +2,11 @@ interface User {
   id: string;
   email: string;
   username: string;
-  first_name: string;
-  last_name: string;
+<<<<<<< HEAD
+  fullName:string;
+=======
+  fullName: string
+>>>>>>> dd2f8cfa4a8fb2161bac5dd85ac0c725b11adbf4
   profile_picture: string;
   phone_number: string;
   age: number;
