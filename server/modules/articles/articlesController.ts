@@ -10,7 +10,7 @@ export const createArticle = async (req: Request, res: Response) => {
     currentDate.getMonth() + 1
   ).padStart(2, "0")}-${String(currentDate.getDate()).padStart(2, "0")}`;
   const { content, authorId, title } = req.body;
-  console.log(req.body);
+  console.log(authorId,'////////////////////////');
 
   try {
     const article = await prisma.article.create({
