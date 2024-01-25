@@ -5,5 +5,5 @@ router.post("/signup",signUp)
 router.post("/signin/:role",signIn)
 router.put("/update/:userId",updateInfo)
 router.delete("/:id",deleteAccount)
-router.get("/:userId",getOne)
+router.get("/getOne/:userId",getOne)
 export default router;
