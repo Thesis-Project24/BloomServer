@@ -18,11 +18,11 @@ export const getDoctors = async (req: Request, res: Response) => {
 
 ////////////////////get one doctor by id///////////////////////////////////////
 export const getOneDoc = async (req: Request, res: Response) => {
-  const productId = JSON.parse(req.params.id);
+  const docId = req.params.id;
   try {
     const doc = await prisma.doctor.findUnique({
       where: {
-        id: productId,
+        id: docId,
       },
     });
     return res.json(doc);
