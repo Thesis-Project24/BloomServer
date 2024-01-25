@@ -95,13 +95,19 @@ const addFlairToPost = async (req: Request, res: Response) => {
 //////////////////////////////////:delete post////////////////////////////////////:
 const deletePost = async (req: Request, res: Response) => {
     try {
-        await prisma.forumPost.delete({ where
-            : { id: Number(req.params.id) } })
-        res.send("deleted");
-    } catch (error:any) {
-        res.send(error.message);
+        await prisma.forumPost.delete({ 
+            where: { id: Number(req.params.id) },
+            include:{
+                comments:true
+            }
+        });
+        res.send("Post deleted successfully");
+    } catch (error: any) {
+        console.error('Error deleting post:', error);
+        res.status(500).send(error.message);
     }
 };
+
 //////////////////////////////upvote post /////////////////////////////////////
 const upvotePost = async (req: Request, res: Response) => {
     try {
@@ -183,4 +189,4 @@ const searchUsers = async (req:Request, res:Response) => {
     }
 };
 
-export { getAllF, addF, addFlairToPost, upvotePost, downvotePost, deletePost,getOneF,searchUsers };
+export { getAllF, addF,addForum, addFlairToPost, upvotePost, downvotePost, deletePost,getOneF,searchUsers };
