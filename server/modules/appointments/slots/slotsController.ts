@@ -3,10 +3,8 @@ import { Request, Response } from "express";
 import { Slot, User, Window } from "../../../types";
 const prisma = new PrismaClient();
 
-
 //////////////////////////////transform window to slots///////////////////////////////////
 const addSlots = (window: Window) => {
-
     //transform starting and ending time to ms
     let start = new Date(window.startingTime).valueOf();
     let end = new Date(window.endingTime).valueOf();
@@ -66,7 +64,7 @@ const getSlot = async (req: Request, res: Response) => {
 
 /////////////////add a user to the waitlist while the appointement is pending////////////////
 const addWaitlist = async (req: Request, res: Response) => {
-    let user = req.body;
+    let user = req.body.user;
     try {
         await prisma.slot.update({
             where: {
@@ -74,14 +72,31 @@ const addWaitlist = async (req: Request, res: Response) => {
             },
             data: {
                 waitlist: {
-                    connect: req.body,
+                    connect: { id: user },
                 },
             },
         });
-    } catch (error) {}
+        res.send(user);
+    } catch (error) {
+        res.send(error);
+    }
 };
 
+//////////////////////get the list of users in the waitlist of a particular slot////////////////:
+const getWaitlist = async (req: Request, res: Response) => {
+    console.log(req.params.slotId)
+    try{
+        let slot = await prisma.slot.findUnique({
+            where: {
+                id: Number(req.params.slotId),
+            },
+            include: { waitlist: true },
+        });
+        res.send(slot?.waitlist)
+    }
+    catch(error){
+    res.send(error)
+    }
+};
 
-
-
-export { addSlots, getSlots, getSlot, addWaitlist };
+export { addSlots, getSlots, getSlot, addWaitlist,getWaitlist };

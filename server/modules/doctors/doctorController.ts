@@ -18,11 +18,11 @@ export const getDoctors = async (req: Request, res: Response) => {
 
 ////////////////////get one doctor by id///////////////////////////////////////
 export const getOneDoc = async (req: Request, res: Response) => {
-  const docId = req.params.id;
+  const doctorId = req.params.id;
   try {
     const doc = await prisma.doctor.findUnique({
       where: {
-        id: docId,
+        id: doctorId,
       },
     });
     return res.json(doc);
@@ -77,6 +77,7 @@ export const addDoctor = async (req: Request, res: Response) => {
 ////////////////////////update doctor info//////////////////////////////////////
 export const upDateDoc = async (req: Request, res: Response) => {
   const {
+    id,
     email,
     first_name,
     last_name,
@@ -105,7 +106,7 @@ export const upDateDoc = async (req: Request, res: Response) => {
       gender,
     };
     const doc = await prisma.doctor.update({
-      where: { id:req.params.id },
+      where: { id },
       data: docBody,
     });
 

@@ -9,6 +9,7 @@ const addWindow = async (req: Request, res: Response) => {
     try {
         //create windows
         const windows = req.body;
+        console.log(req.body)
         //create and return windows
         const windowsDb = await prisma.$transaction(
             windows.map((window: Window) =>
