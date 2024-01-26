@@ -19,11 +19,13 @@ interface Doctor {
   first_name: string;
   last_name: string;
   specialty: string;
-  review?: number;
   profile_picture: string;
   phone_number: string;
   address: string[];
   bio?: string;
+  rate?: number;
+  review?:number;
+  gender?:string;
 }
 
 interface Meds {

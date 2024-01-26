@@ -25,8 +25,8 @@ CREATE TABLE "Doctor" (
     "phone_number" TEXT,
     "address" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "bio" TEXT,
-    "rate" INTEGER,
-    "review" INTEGER,
+    "rate" INTEGER DEFAULT 0,
+    "review" INTEGER DEFAULT 0,
     "gender" TEXT,
     "role" TEXT NOT NULL DEFAULT 'doctor',
 
@@ -273,7 +273,7 @@ ALTER TABLE "Slot" ADD CONSTRAINT "Slot_windowId_fkey" FOREIGN KEY ("windowId") 
 ALTER TABLE "ForumPost" ADD CONSTRAINT "ForumPost_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Comment" ADD CONSTRAINT "Comment_postId_fkey" FOREIGN KEY ("postId") REFERENCES "ForumPost"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Comment" ADD CONSTRAINT "Comment_postId_fkey" FOREIGN KEY ("postId") REFERENCES "ForumPost"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Comment" ADD CONSTRAINT "Comment_tagId_fkey" FOREIGN KEY ("tagId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;

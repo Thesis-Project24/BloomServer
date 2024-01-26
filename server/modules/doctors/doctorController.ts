@@ -45,6 +45,9 @@ export const addDoctor = async (req: Request, res: Response) => {
     profile_picture,
     address,
     bio,
+    rate,
+    review,
+    gender,
   }: Doctor = req.body;
   try {
     const docBody=  {
@@ -57,6 +60,9 @@ export const addDoctor = async (req: Request, res: Response) => {
       profile_picture,
       address,
       bio,
+      rate,
+      review,
+      gender,
     };
     const doc = await prisma.doctor.create({
       data: docBody,
@@ -71,6 +77,7 @@ export const addDoctor = async (req: Request, res: Response) => {
 ////////////////////////update doctor info//////////////////////////////////////
 export const upDateDoc = async (req: Request, res: Response) => {
   const {
+    id,
     email,
     first_name,
     last_name,
@@ -79,6 +86,9 @@ export const upDateDoc = async (req: Request, res: Response) => {
     profile_picture,
     address,
     bio,
+    rate,
+    review,
+    gender,
   }: Doctor = req.body;
 
   try {
@@ -91,9 +101,12 @@ export const upDateDoc = async (req: Request, res: Response) => {
       profile_picture,
       address,
       bio,
+      rate,
+      review,
+      gender,
     };
     const doc = await prisma.doctor.update({
-      where: { id:req.params.id },
+      where: { id },
       data: docBody,
     });
 
